@@ -7,6 +7,7 @@ use Cocur\Slugify\Slugify;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
@@ -26,6 +27,8 @@ class Project
      * @var string|null
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min=5, max=255)
+     * @Assert\NotBlank()
      */
     private ?string $title;
 
@@ -40,6 +43,8 @@ class Project
      * @var string|null
      *
      * @ORM\Column(type="text")
+     * @Assert\Length(min=15)
+     * @Assert\NotBlank()
      */
     private ?string $content;
 
@@ -47,6 +52,7 @@ class Project
      * @var bool|null
      *
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull()
      */
     private ?bool $validate;
 
@@ -159,7 +165,7 @@ class Project
      * @param bool $validate
      * @return $this
      */
-    public function setValidate(bool $validate): self
+    public function setValidate(?bool $validate): self
     {
         $this->validate = $validate;
 

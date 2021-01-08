@@ -5,13 +5,14 @@ namespace App\Controller\API;
 use App\Entity\Project;
 use App\Helper\DataHelper;
 use App\Repository\ProjectRepository;
+use App\Validator\Validator;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api')]
 class ProjectController extends AbstractController
@@ -28,6 +29,10 @@ class ProjectController extends AbstractController
      * @var DataHelper
      */
     private DataHelper $dataHelper;
+    /**
+     * @var Validator
+     */
+    private Validator $validator;
 
     /**
      * ProjectController constructor.
@@ -39,6 +44,7 @@ class ProjectController extends AbstractController
         $this->projectRepository = $projectRepository;
         $this->entityManager = $entityManager;
         $this->dataHelper = new DataHelper();
+        $this->validator = new Validator();
     }
 
     /**
@@ -59,10 +65,11 @@ class ProjectController extends AbstractController
 
     /**
      * @param Request $request
+     * @param ValidatorInterface $validator
      * @return JsonResponse
      */
     #[Route('/project/create', name: 'api.project.store', methods: ["POST"])]
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, ValidatorInterface $validator): JsonResponse
     {
         // Set data json body
         $body = json_decode($request->request->get('body'));
@@ -83,6 +90,17 @@ class ProjectController extends AbstractController
             ->setSlug($body->slug)
             ->setContent($body->content)
             ->setValidate($body->validate);
+
+        // Validate entity
+        $errors = $validator->validate($project);
+        if ($this->validator->hasError($errors)) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Error validation, check your incorrect fields !',
+                'errors' => $this->validator->getMessage($errors)
+            ], 302);
+        }
+        // if valid data entity
         $this->entityManager->persist($project);
         $this->entityManager->flush();
 
