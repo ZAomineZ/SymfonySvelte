@@ -1,0 +1,21 @@
+.boxed-btn {
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #FFFFFF;
+  cursor: pointer;
+  padding: 13px 41px;
+  text-align: center;
+  background-size: 101% 100%;
+  border-radius: 50px;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s;
+  display: inline-block;
+  border: 1px solid transparent;
+}
+
+.boxed-btn {
+  background: linear-gradient(to right, #ff008c 0%, #ff6357 100%);
+}

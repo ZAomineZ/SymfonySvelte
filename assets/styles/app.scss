@@ -1,3 +1,10 @@
+body {
+  font-family: "Poppins", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 a, .button {
   -webkit-transition: 0.3s;
   -moz-transition: 0.3s;
@@ -19,8 +26,20 @@ li {
   list-style: none;
 }
 
+h3 {
+  font-size: 24px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2rem;
+}
+
+
 // Imports layout files scss
 @import "./layout/header.scss";
 @import "./layout/header-mobile.scss";
 // Import element to app
 @import "./elements/slider-element.scss";
+@import "./elements/element-body.scss";
+// Import components scss
+@import "./components/button.scss";

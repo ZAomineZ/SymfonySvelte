@@ -2,11 +2,11 @@
 
 namespace App\Tests\Controller;
 
+use App\Tests\WebApplicationTestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProjectControllerTest extends WebTestCase
+class ProjectControllerTest extends WebApplicationTestCase
 {
     /**
      * @var KernelBrowser

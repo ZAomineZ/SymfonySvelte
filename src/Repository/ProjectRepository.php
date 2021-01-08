@@ -35,4 +35,16 @@ class ProjectRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return array
+     */
+    public function findAllValidate(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.validate = :validate')
+            ->setParameter('validate', 1)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -3,16 +3,14 @@
 namespace App\Tests\Controller\API;
 
 use App\DataFixtures\ProjectFixtures;
+use App\DataFixtures\ProjectValidateFixtures;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\SchemaTool;
+use App\Tests\WebApplicationTestCase;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
-use stdClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class ProjectControllerTest extends WebTestCase
+class ProjectControllerTest extends WebApplicationTestCase
 {
 
     use FixturesTrait;
@@ -25,10 +23,6 @@ class ProjectControllerTest extends WebTestCase
      * @var ProjectRepository|null
      */
     private ?ProjectRepository $projectRepository;
-    /**
-     * @var EntityManagerInterface
-     */
-    private EntityManagerInterface $entityManager;
 
     /**
      * ProjectControllerTest constructor.
@@ -51,20 +45,22 @@ class ProjectControllerTest extends WebTestCase
         $this->clearDatabase();
     }
 
-    protected function clearDatabase()
+    public function testAllProjectsValidate()
     {
-        $kernel = self::bootKernel();
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
+        // Fixture projects
+        $this->loadFixtures([ProjectValidateFixtures::class]);
 
-        //In case leftover entries exist
-        $schemaTool = new SchemaTool($this->entityManager);
-        $metadata = $this->entityManager->getMetadataFactory()->getAllMetadata();
+        $client = $this->client;
+        $client->request('GET', '/api/projects');
 
-        // Drop and recreate tables for all entities
-        $schemaTool->dropSchema($metadata);
-        $schemaTool->createSchema($metadata);
+        // Assertion request
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion response projects
+        $response = $this->getResponse($client, true);
+        $projects = $response['data']['projects'] ?: [];
+        $this->assertEquals(true, $response['success']);
+        $this->assertEquals(2, count($projects));
     }
 
     public function testSuccessPostCreateProjectApi()
@@ -76,7 +72,7 @@ class ProjectControllerTest extends WebTestCase
             'content' => 'Je vous propose un content sur le seo de mon entreprise !',
             'validate' => 0
         ];
-        $client->request('POST', '/project/create', [
+        $client->request('POST', '/api/project/create', [
             'body' => json_encode($data)
         ]);
         $this->assertResponseStatusCodeSame(302);
@@ -102,7 +98,7 @@ class ProjectControllerTest extends WebTestCase
             'content' => 'Je vous propose un content sur le seo de mon entreprise !',
             'validate' => 0
         ];
-        $client->request('POST', '/project/create', [
+        $client->request('POST', '/api/project/create', [
             'body' => json_encode($data)
         ]);
         $this->assertResponseStatusCodeSame(302);
@@ -124,7 +120,7 @@ class ProjectControllerTest extends WebTestCase
             'content' => 'Je vous propose un content sur le seo de mon entreprise !',
             'validate' => 0
         ];
-        $client->request('POST', '/project/create', [
+        $client->request('POST', '/api/project/create', [
             'body' => json_encode($data)
         ]);
         $this->assertResponseStatusCodeSame(302);
@@ -141,16 +137,6 @@ class ProjectControllerTest extends WebTestCase
         $response = $this->getResponse($client);
         $this->assertEquals(true, $response->success);
         $this->assertEquals('You are created your project with success !', $response->message);
-    }
-
-    /**
-     * @param KernelBrowser $client
-     * @return stdClass
-     */
-    private function getResponse(KernelBrowser $client): stdClass
-    {
-        $response = $client->getResponse()->getContent();
-        return json_decode($response);
     }
 
     /**
