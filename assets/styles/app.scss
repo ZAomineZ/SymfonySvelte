@@ -1,0 +1,26 @@
+a, .button {
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
+a, button {
+  color: #1F1F1F;
+  outline: medium none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+// Imports layout files scss
+@import "./layout/header.scss";
+@import "./layout/header-mobile.scss";
+// Import element to app
+@import "./elements/slider-element.scss";

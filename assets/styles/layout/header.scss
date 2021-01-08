@@ -1,0 +1,87 @@
+.header-area {
+  left: 0;
+  right: 0;
+  width: 100%;
+  top: 0;
+  z-index: 99;
+  position: absolute;
+}
+
+.header-area .main-header-area {
+  padding: 25px 132px;
+  background: #ffffff;
+}
+
+.header-area .main-header-area .main-menu {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.header-area .main-header-area .main-menu ul li {
+  display: inline-block;
+  position: relative;
+  margin: 0 10px;
+}
+
+.header-area .main-header-area .main-menu ul li a {
+  color: #727272;
+  font-size: 15px;
+  text-transform: capitalize;
+  font-weight: 400;
+  display: inline-block;
+  padding: 0 0 0 0;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+}
+
+.header-area .main-header-area .main-menu ul li:first-child a {
+  padding-left: 0;
+}
+
+.header-area .main-header-area .phone-info-header {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+  -ms-justify-content: flex-end;
+  justify-content: flex-end;
+}
+
+.header-area .main-header-area .phone-info-header .btn-phone {
+  margin-left: 30px;
+}
+
+.header-area .main-header-area .phone-info-header .btn-phone a {
+  background: transparent;
+  padding: 12px 26px;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid #FF008C;
+  color: #FF008C;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
+@media (max-width: 767px) {
+  .header-area {
+    padding-top: 0;
+  }
+
+  .header-area .main-header-area {
+    padding: 10px 0px;
+    background: #ffffff;
+    border-bottom: 1px solid #fafafa;
+  }
+}
