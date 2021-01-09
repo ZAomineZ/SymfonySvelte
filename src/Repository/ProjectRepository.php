@@ -37,6 +37,19 @@ class ProjectRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param string $slug
+     * @return array
+     */
+    public function findBySlug(string $slug): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @return array
      */
     public function findAllValidate(): array

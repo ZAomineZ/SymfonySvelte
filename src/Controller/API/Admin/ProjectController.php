@@ -110,4 +110,33 @@ class ProjectController extends AbstractController
             'message' => 'You are created your project with success !'
         ], 302);
     }
+
+    /**
+     * @param string $slug
+     * @return JsonResponse
+     */
+    #[Route('/admin/project/edit/{slug}', name: 'api.project.edit', methods: ["GET"])]
+    public function edit(string $slug): JsonResponse
+    {
+        $project = $this->projectRepository->findBySlug($slug) ?
+            $this->projectRepository->findBySlug($slug)[0] : null;
+        if (!$project) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => "The slug $slug project don't exist in our database !"
+            ], 302);
+        }
+
+        return new JsonResponse([
+            'success' => true,
+            'data' => [
+                'project' => $this->projectHelper->toObject($project)
+            ]
+        ], 302);
+    }
+
+    public function update()
+    {
+
+    }
 }

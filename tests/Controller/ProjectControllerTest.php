@@ -28,12 +28,14 @@ class ProjectControllerTest extends WebApplicationTestCase
     {
         parent::setUp();
         $this->client = self::createClient();
+
+        $this->clearDatabase();
     }
 
     public function testIndexPage()
     {
         $client = $this->client;
-        $client->request('GET', '/projects');
+        $client->request('GET', '/admin/projects');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('title', 'Projects');
@@ -42,7 +44,7 @@ class ProjectControllerTest extends WebApplicationTestCase
     public function testCreatePageProject()
     {
         $client = $this->client;
-        $client->request('GET', '/project/create');
+        $client->request('GET', '/admin/project/create');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('title', 'Create project');

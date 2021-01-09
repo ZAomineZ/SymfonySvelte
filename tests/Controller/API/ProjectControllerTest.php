@@ -51,7 +51,7 @@ class ProjectControllerTest extends WebApplicationTestCase
         $this->loadFixtures([ProjectValidateFixtures::class]);
 
         $client = $this->client;
-        $client->request('GET', '/api/projects');
+        $client->request('GET', '/api/admin/projects');
 
         // Assertion request
         $this->assertResponseStatusCodeSame(302);
@@ -72,7 +72,7 @@ class ProjectControllerTest extends WebApplicationTestCase
             'content' => 'Je vous propose un content sur le seo de mon entreprise !',
             'validate' => 0
         ];
-        $client->request('POST', '/api/project/create', [
+        $client->request('POST', '/api/admin/project/create', [
             'body' => json_encode($data)
         ]);
         $this->assertResponseStatusCodeSame(302);
@@ -98,7 +98,7 @@ class ProjectControllerTest extends WebApplicationTestCase
             'content' => 'Je vous propose un content sur le seo de mon entreprise !',
             'validate' => 0
         ];
-        $client->request('POST', '/api/project/create', [
+        $client->request('POST', '/api/admin/project/create', [
             'body' => json_encode($data)
         ]);
         $this->assertResponseStatusCodeSame(302);
@@ -120,7 +120,7 @@ class ProjectControllerTest extends WebApplicationTestCase
             'content' => 'Je vous propose un content sur le seo de mon entreprise !',
             'validate' => 0
         ];
-        $client->request('POST', '/api/project/create', [
+        $client->request('POST', '/api/admin/project/create', [
             'body' => json_encode($data)
         ]);
         $this->assertResponseStatusCodeSame(302);
@@ -141,7 +141,36 @@ class ProjectControllerTest extends WebApplicationTestCase
 
     public function testActionEditGetProjectEntity()
     {
+        // LOAD FIXTURE
+        $this->loadFixtures([ProjectFixtures::class]);
+        // GET LAST PROJECT
+        $project = $this->getLastProject();
 
+        $client = $this->client;
+        $client->request('GET', '/api/admin/project/edit/' . $project->getSlug());
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Project
+        $response = $this->getResponse($client);
+        $this->assertEquals(true, $response->success);
+        $this->assertEquals($project->getSlug(), $response->data->project->slug);
+    }
+
+    public function testActionEditGetProjectEntityWithBadSlug()
+    {
+        // LOAD FIXTURE
+        $this->loadFixtures([ProjectFixtures::class]);
+        // GET LAST PROJECT
+        $project = $this->getLastProject();
+
+        $client = $this->client;
+        $client->request('GET', '/api/admin/project/edit/' . 'bad-slug');
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Project
+        $response = $this->getResponse($client);
+        $this->assertEquals(false, $response->success);
+        $this->assertEquals("The slug bad-slug project don't exist in our database !", $response->message);
     }
 
     /**
