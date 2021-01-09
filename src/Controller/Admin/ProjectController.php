@@ -25,4 +25,9 @@ class ProjectController extends AbstractController
     {
         return $this->render('page/admin/project/create.html.twig');
     }
+
+    public function edit()
+    {
+
+    }
 }

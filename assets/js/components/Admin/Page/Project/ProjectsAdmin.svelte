@@ -1,6 +1,22 @@
 <script>
+    // COMPONENTS HTML
     import Sidebar from "../../Layout/Sidebar.svelte";
     import Navbar from "../../Layout/Navbar.svelte";
+    // COMPONENTS SVELTE
+    import {onMount} from "svelte";
+    // LIBS APP
+    import {Fetch} from "../../../../utils/ApiFetch";
+
+    // STATE
+    let projects = []
+
+    onMount(async () => {
+        const response = await (new Fetch()).response('/api/admin/projects', 'GET')
+        if (response.success) {
+            projects = response.data.projects
+        }
+        console.log(projects)
+    })
 </script>
 
 <div>
@@ -28,8 +44,26 @@
                                         <th scope="col">Category</th>
                                         <th scope="col">Valid ?</th>
                                         <th scope="col">Created</th>
+                                        <th scope="col">Actions</th>
                                     </tr>
                                     </thead>
+                                    <tbody>
+                                    {#each projects as project, i}
+                                        <tr>
+                                            <td>{i + 1}</td>
+                                            <td>{project.title}</td>
+                                            <td>{project.slug}</td>
+                                            <td>{project.content}</td>
+                                            <td>{project.category}</td>
+                                            <td>{project.validate ? 'YES' : 'NO'}</td>
+                                            <td>{project.created_at}</td>
+                                            <td>
+                                                <a href="/" class="btn btn-sm btn-secondary">Edit</a>
+                                                <a href="/" class="btn btn-sm btn-danger">Delete</a>
+                                            </td>
+                                        </tr>
+                                    {/each}
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

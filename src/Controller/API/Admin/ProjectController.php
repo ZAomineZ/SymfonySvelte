@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\API;
+namespace App\Controller\API\Admin;
 
 use App\Entity\Project;
-use App\Helper\DataHelper;
+use App\Helper\ProjectHelper;
 use App\Repository\ProjectRepository;
 use App\Validator\Validator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,13 +26,13 @@ class ProjectController extends AbstractController
      */
     private EntityManagerInterface $entityManager;
     /**
-     * @var DataHelper
-     */
-    private DataHelper $dataHelper;
-    /**
      * @var Validator
      */
     private Validator $validator;
+    /**
+     * @var ProjectHelper
+     */
+    private ProjectHelper $projectHelper;
 
     /**
      * ProjectController constructor.
@@ -43,18 +43,18 @@ class ProjectController extends AbstractController
     {
         $this->projectRepository = $projectRepository;
         $this->entityManager = $entityManager;
-        $this->dataHelper = new DataHelper();
+        $this->projectHelper = new ProjectHelper();
         $this->validator = new Validator();
     }
 
     /**
      * @return JsonResponse
      */
-    #[Route('/projects', name: 'api.project.index', methods: ["GET"])]
+    #[Route('/admin/projects', name: 'api.project.index', methods: ["GET"])]
     public function index(): JsonResponse
     {
         $data = $this->projectRepository->findAllValidate();
-        $projects = $this->dataHelper->toArray($data);
+        $projects = $this->projectHelper->toArray($data);
         return new JsonResponse([
             'success' => true,
             'data' => [
@@ -68,7 +68,7 @@ class ProjectController extends AbstractController
      * @param ValidatorInterface $validator
      * @return JsonResponse
      */
-    #[Route('/project/create', name: 'api.project.store', methods: ["POST"])]
+    #[Route('/admin/project/create', name: 'api.project.store', methods: ["POST"])]
     public function store(Request $request, ValidatorInterface $validator): JsonResponse
     {
         // Set data json body

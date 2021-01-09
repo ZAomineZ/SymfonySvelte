@@ -139,6 +139,11 @@ class ProjectControllerTest extends WebApplicationTestCase
         $this->assertEquals('You are created your project with success !', $response->message);
     }
 
+    public function testActionEditGetProjectEntity()
+    {
+
+    }
+
     /**
      * @return Project|null
      */

@@ -1,24 +1,43 @@
+<script>
+    // PROPS
+    export let callInput = {
+        handleTitleValue: () => {
+        },
+        handleSlugValue: () => {
+        },
+        handleContentValue: () => {
+        },
+        handleCategoryIDValue: () => {
+        },
+        handleValidateValue: () => {
+        }
+    }
+</script>
+
 <div id="create-project-form">
     <div class="background-white p-20 bd">
         <h6 class="color-grey-bold">Form project</h6>
         <div class="mt-30">
-            <form method="post">
+            <form method="post" on:submit|preventDefault>
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input class="form-control" id="title" placeholder="Your title..." type="text">
+                    <input class="form-control" id="title" name="title" on:input={callInput.handleTitleValue} placeholder="Your title..."
+                           type="text">
                 </div>
                 <div class="form-group">
                     <label for="slug">Slug</label>
-                    <input class="form-control" id="slug" placeholder="Your slug..." type="text">
+                    <input class="form-control" id="slug" name="slug" on:input={callInput.handleSlugValue} placeholder="Your slug..."
+                           type="text">
                 </div>
                 <div class="form-group">
                     <label for="content">Content</label>
-                    <textarea class="form-control" cols="30" id="content" name="content" placeholder="Your content..."
-                              rows="10"></textarea>
+                    <textarea class="form-control" cols="30" id="content" name="content" on:input={callInput.handleContentValue}
+                              placeholder="Your content..." rows="10"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="category_id">Category</label>
-                    <select class="form-control" id="category_id" name="category_id">
+                    <select class="form-control" id="category_id" name="category_id"
+                            on:input={callInput.handleCategoryIDValue()}>
                         <option value="">Choose your category</option>
                     </select>
                 </div>
@@ -26,14 +45,15 @@
                     <div class="col-md-2">Validate ?</div>
                     <div class="col-sm-10">
                         <div class="form-check">
-                            <label for="validate" class="form-check-label">
-                                <input type="checkbox" class="form-check-input">
+                            <label class="form-check-label" for="validate">
+                                <input class="form-check-input" id="validate" name="validate" on:input={callInput.handleValidateValue}
+                                       type="checkbox">
                                 Validate
                             </label>
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button class="btn btn-primary" type="submit">Submit</button>
             </form>
         </div>
     </div>

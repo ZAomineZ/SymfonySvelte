@@ -12,7 +12,7 @@ class DataHelper
     {
         $newData = [];
         foreach ($data as $key => $value) {
-            $newData[$key][] = (array)$value;
+            $newData[$key]['id'] = (array)$value;
         }
         return $newData;
     }
