@@ -8,6 +8,13 @@ body {
   color: #72777a;
   letter-spacing: .2px;
   overflow-x: hidden;
+  text-align: left;
+  background-color: #FFFFFF;
+  margin: 0;
+}
+
+body, html, html a {
+  -webkit-font-smoothing: antialiased
 }
 
 body, h1, h2, h3, h4, h5, h6 {
