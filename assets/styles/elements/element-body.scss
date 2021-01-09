@@ -5,3 +5,59 @@
 .slider_area .single_slider .illustrator-body img {
   width: 100%;
 }
+
+.company_info {
+  padding-bottom: 70px;
+  padding-top: 130px;
+}
+
+.company_info .man_img_thumb {
+  margin-bottom: 30px;
+  padding-right: 20px;
+}
+
+.company_info .man_img_thumb img {
+  width: 100%;
+}
+
+.company_info .company_info_text {
+  margin-bottom: 30px;
+  margin-top: 29px;
+  padding-left: 45px;
+}
+
+.company_info .company_info_text h3 {
+  font-size: 40px;
+  line-height: 52px;
+  color: #001D38;
+  font-weight: 400;
+}
+
+.company_info .company_info_text p {
+  color: #727272;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 28px;
+  margin-top: 21px;
+  margin-bottom: 36px;
+}
+
+@media (max-width: 767px) {
+  .company_info {
+    padding-bottom: 20px;
+  }
+
+  .company_info .man_img_thumb {
+    padding-right: 0;
+  }
+
+  .company_info .company_info_text {
+    padding-left: 0;
+    margin-top: 0;
+  }
+
+  .company_info .company_info_text h3 {
+    font-size: 21px;
+    line-height: 36px;
+  }
+}
