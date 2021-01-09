@@ -1,6 +1,7 @@
 <script>
     import Sidebar from "../../Layout/Sidebar.svelte";
     import Navbar from "../../Layout/Navbar.svelte";
+    import FormProject from "../components/Forms/FormProject.svelte";
 </script>
 
 <div>
