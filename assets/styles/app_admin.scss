@@ -53,6 +53,24 @@ img {
   border-style: none;
 }
 
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+p {
+  font-family: Roboto, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+  line-height: 1.9;
+}
+
+.h4, h4 {
+  font-size: 1.3125rem;
+}
+
+.h6, h6 {
+  font-size: .875rem;
+}
+
 // Import header components
 @import "./admin/layout/sidebar.scss";
 @import "./admin/layout/navbar.scss";
@@ -62,5 +80,6 @@ img {
 @import "./admin/component/element.scss";
 @import "./admin/component/text.scss";
 @import "./admin/component/color.scss";
+@import "./admin/component/table.scss";
 // Import libs
 @import "./admin/Lib/themify-icons.css";

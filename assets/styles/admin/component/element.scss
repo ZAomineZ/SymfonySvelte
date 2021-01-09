@@ -2,12 +2,32 @@
   margin-top: 30px !important;
 }
 
+.mt-10 {
+  margin-top: 10px !important;
+}
+
 .mr-10 {
   margin-right: 10px !important;
 }
 
+.mb-30 {
+  margin-bottom: 30px !important;
+}
+
+.mb-20 {
+  margin-bottom: 20px !important;
+}
+
+.p-20 {
+  padding: 20px !important;
+}
+
 .border-radius-50 {
   border-radius: 50% !important;
+}
+
+.border-radius-3px {
+  border-radius: 3px !important;
 }
 
 .w-2r {
@@ -16,4 +36,8 @@
 
 .font-sm {
   font-size: .87rem !important;
+}
+
+.bd {
+  border: 1px solid rgba(0,0,0,.0625)!important;
 }

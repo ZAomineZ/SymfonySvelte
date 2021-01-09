@@ -31,13 +31,4 @@ class ProjectController extends AbstractController
     {
         return $this->render('project/index.html.twig');
     }
-
-    /**
-     * @return Response
-     */
-    #[Route('/project/create', name: 'project.create', methods: ["GET", "HEAD"])]
-    public function create(): Response
-    {
-        return $this->render('project/create.html.twig');
-    }
 }
