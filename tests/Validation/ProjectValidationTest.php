@@ -14,7 +14,7 @@ class ProjectValidationTest extends WebApplicationTestCase
      */
     private KernelBrowser $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

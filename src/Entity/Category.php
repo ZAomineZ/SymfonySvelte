@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository", repositoryClass=CategoryRepository::class)
@@ -29,6 +30,8 @@ class Category
      * @var string|null
      *
      * @ORM\Column(type="string", length=60)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=3, max=60)
      */
     private ?string $name;
 
@@ -43,6 +46,8 @@ class Category
      * @var string|null
      *
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
+     * @Assert\Length(min=15)
      */
     private ?string $content;
 
