@@ -171,6 +171,39 @@ class ProjectControllerTest extends WebApplicationTestCase
         $this->assertEquals("The slug bad-slug project don't exist in our database !", $response->message);
     }
 
+    public function testActionUpdateSuccessWithTitleIdentical()
+    {
+        // LOAD FIXTURE
+        $this->loadFixtures([ProjectFixtures::class]);
+        // GET LAST PROJECT
+        $project = $this->getLastProject();
+
+        $client = $this->client;
+        $data = [
+            'title' => 'Project SEO',
+            'slug' => 'project-seo-test',
+            'content' => 'Je vous propose un content sur le seo de mon entreprise "test" !',
+            'validate' => 1
+        ];
+        $client->request('POST', '/api/admin/project/update/' . $project->getSlug(), [
+            'body' => json_encode($data)
+        ]);
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Request
+        $response = $this->getResponse($client);
+        $this->assertEquals(true, $response->success);
+        $this->assertEquals("You are updated your project with success !", $response->message);
+        // Assertion Project
+        $project_new = $this->getLastProject();
+
+        $this->assertEquals('Project SEO', $project_new->getTitle());
+        $this->assertEquals('project-seo-test', $project_new->getSlug());
+        $this->assertEquals('Je vous propose un content sur le seo de mon entreprise test !', $project_new->getContent());
+        $this->assertEquals(1, $project_new->getValidate());
+        $this->assertEquals(1, count($this->projectRepository->findAll()));
+    }
+
     public function testActionUpdateSuccess()
     {
         // LOAD FIXTURE
@@ -185,7 +218,7 @@ class ProjectControllerTest extends WebApplicationTestCase
             'content' => 'Je vous propose un content sur le seo de mon entreprise "test" !',
             'validate' => 1
         ];
-        $client->request('PUT', '/api/admin/project/update/' . $project->getSlug(), [
+        $client->request('POST', '/api/admin/project/update/' . $project->getSlug(), [
             'body' => json_encode($data)
         ]);
         $this->assertResponseStatusCodeSame(302);

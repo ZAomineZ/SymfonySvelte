@@ -159,3 +159,13 @@
     display: inline-block;
   }
 }
+
+@media screen and (max-width: 1439px) and (min-width: 992px) {
+  .is-collapsed .sidebar .sidebar-inner .sidebar-menu > li > a .title {
+    display: inline-block;
+  }
+
+  .sidebar .sidebar-inner .sidebar-menu > li > a .title {
+    display: none;
+  }
+}

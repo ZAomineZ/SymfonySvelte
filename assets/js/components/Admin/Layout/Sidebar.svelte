@@ -11,7 +11,7 @@
                                 </div>
                             </div>
                             <div class="block block-greed">
-                                <h5 class="logo-text mb-0"></h5>
+                                <h5 class="logo-text mb-0">Adminator</h5>
                             </div>
                         </div>
                     </a>
@@ -27,11 +27,27 @@
         </div>
         <ul class="sidebar-menu sidebar-menu-items">
             <li class="nav-item mt-30 active">
-                <a href="/" class="sidebar-link">
+                <a class="sidebar-link" href="/">
                     <span class="icon-holder">
                         <i class="ti-home color-blue"></i>
                     </span>
                     <span class="title">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-link" href="/admin/projects">
+                    <span class="icon-holder">
+                        <i class="ti-book color-pink"></i>
+                    </span>
+                    <span class="title">Projects</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-link" href="/admin/categories">
+                    <span class="icon-holder">
+                        <i class="ti-star color-orange"></i>
+                    </span>
+                    <span class="title">Categories</span>
                 </a>
             </li>
         </ul>

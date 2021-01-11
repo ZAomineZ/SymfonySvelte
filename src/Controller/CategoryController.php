@@ -8,6 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CategoryController extends AbstractController
 {
+    /**
+     * @return Response
+     */
     #[Route('/category', name: 'category')]
     public function index(): Response
     {

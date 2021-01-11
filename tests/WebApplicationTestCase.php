@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use stdClass;
@@ -24,6 +25,16 @@ class WebApplicationTestCase extends WebTestCase
     {
         $response = $client->getResponse()->getContent();
         return json_decode($response, $associative);
+    }
+
+    /**
+     * @param string $class
+     * @return mixed
+     */
+    public function getLastEntity(string $class): mixed
+    {
+        $repository = self::$container->get($class);
+        return $repository->find(1);
     }
 
     protected function clearDatabase()
