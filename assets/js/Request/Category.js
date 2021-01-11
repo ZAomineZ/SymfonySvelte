@@ -26,4 +26,27 @@ export class Category
         return this.fetch.response('/api/admin/category/create', 'POST', formData)
     }
 
+    /**
+     * Return the request API get for edit a category
+     *
+     * @param {string} slug
+     * @returns {Promise<*|null>}
+     */
+    async edit(slug)
+    {
+        return this.fetch.response('/api/admin/category/edit/' + slug, 'GET')
+    }
+
+    /**
+     * Return the request API post for update a category
+     *
+     * @param {FormData} formData
+     * @param {string} slug
+     * @returns {Promise<*|null>}
+     */
+    async update(formData, slug)
+    {
+        return this.fetch.response('/api/admin/category/update/' + slug, 'POST', formData)
+    }
+
 }
