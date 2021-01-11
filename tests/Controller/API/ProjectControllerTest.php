@@ -237,6 +237,42 @@ class ProjectControllerTest extends WebApplicationTestCase
         $this->assertEquals(1, count($this->projectRepository->findAll()));
     }
 
+    public function testActionDeleteWithBadSlug()
+    {
+        // LOAD FIXTURE
+        $this->loadFixtures([ProjectFixtures::class]);
+
+        $client = $this->client;
+        $client->request('DELETE', '/api/admin/project/delete/' . 'bad-slug');
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Request
+        $response = $this->getResponse($client);
+        $this->assertEquals(false, $response->success);
+        $this->assertEquals("You try to delete a project who associate a bad slug !", $response->message);
+        // Assertion project
+        $this->assertEquals(1, count($this->projectRepository->findAll()));
+    }
+
+    public function testActionDeleteSuccess()
+    {
+        // LOAD FIXTURE
+        $this->loadFixtures([ProjectFixtures::class]);
+        // Get last project
+        $project = $this->getLastProject();
+
+        $client = $this->client;
+        $client->request('DELETE', '/api/admin/project/delete/' . $project->getSlug());
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Request
+        $response = $this->getResponse($client);
+        $this->assertEquals(true, $response->success);
+        $this->assertEquals("You are deleted your project with success !", $response->message);
+        // Assertion project
+        $this->assertEquals(0, count($this->projectRepository->findAll()));
+    }
+
     /**
      * @return Project|null
      */

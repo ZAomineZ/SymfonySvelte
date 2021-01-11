@@ -4,9 +4,12 @@ namespace App\Controller\API\Admin;
 
 use App\Entity\Project;
 use App\Helper\ProjectHelper;
+use App\Helper\Response\ResponseJson;
 use App\Repository\ProjectRepository;
 use App\Validator\Validator;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,6 +37,10 @@ class ProjectController extends AbstractController
      * @var ProjectHelper
      */
     private ProjectHelper $projectHelper;
+    /**
+     * @var ResponseJson
+     */
+    private ResponseJson $responseJson;
 
     /**
      * ProjectController constructor.
@@ -44,8 +51,10 @@ class ProjectController extends AbstractController
     {
         $this->projectRepository = $projectRepository;
         $this->entityManager = $entityManager;
+
         $this->projectHelper = new ProjectHelper();
         $this->validator = new Validator();
+        $this->responseJson = new ResponseJson();
     }
 
     /**
@@ -68,6 +77,7 @@ class ProjectController extends AbstractController
      * @param Request $request
      * @param ValidatorInterface $validator
      * @return JsonResponse
+     * @throws NonUniqueResultException
      */
     #[Route('/admin/project/create', name: 'api.project.store', methods: ["POST"])]
     public function store(Request $request, ValidatorInterface $validator): JsonResponse
@@ -76,13 +86,9 @@ class ProjectController extends AbstractController
         $body = json_decode($request->request->get('body'));
 
         // Check if the title already exist
-        $project_exist = $this->projectRepository->findByTitle($body->title) ?
-            $this->projectRepository->findByTitle($body->title)[0] : null;
+        $project_exist = $this->projectRepository->findByTitle($body->title);
         if ($project_exist) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => 'This title is already exist on the project !'
-            ], 302);
+            return $this->responseJson->message(false, 'This title is already exist on the project !');
         }
 
         // Set project entity
@@ -106,26 +112,20 @@ class ProjectController extends AbstractController
         $this->entityManager->flush();
 
         // Return response format json success
-        return new JsonResponse([
-            'success' => true,
-            'message' => 'You are created your project with success !'
-        ], 302);
+        return $this->responseJson->message(true, 'You are created your project with success !');
     }
 
     /**
      * @param string $slug
      * @return JsonResponse
+     * @throws NonUniqueResultException
      */
     #[Route('/admin/project/edit/{slug}', name: 'api.project.edit', methods: ["GET"])]
     public function edit(string $slug): JsonResponse
     {
-        $project = $this->projectRepository->findBySlug($slug) ?
-            $this->projectRepository->findBySlug($slug)[0] : null;
+        $project = $this->projectRepository->findBySlug($slug);
         if (!$project) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => "The slug $slug project don't exist in our database !"
-            ], 302);
+            return $this->responseJson->message(false, "The slug $slug project don't exist in our database !");
         }
 
         return new JsonResponse([
@@ -150,19 +150,13 @@ class ProjectController extends AbstractController
         $body = json_decode($request->request->get('body'));
 
         // Check if the title already exist
-        /** @var Project $project_exist */
-        $project_exist = $this->projectRepository->findByTitle($body->title) ?
-            $this->projectRepository->findByTitle($body->title)[0] : null;
+        $project_exist = $this->projectRepository->findByTitle($body->title);
         if ($project_exist && $project_exist->getSlug() !== $slug) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => 'This title is already exist on the project !'
-            ], 302);
+            return $this->responseJson->message(false, 'This title is already exist on the project !');
         }
 
         // Set project entity
-        $project = $this->projectRepository->findBySlug($slug) ?
-            $this->projectRepository->findBySlug($slug)[0] : null;
+        $project = $this->projectRepository->findBySlug($slug);
         $project->setTitle($body->title)
             ->setSlug($body->slug)
             ->setContent($body->content)
@@ -181,9 +175,26 @@ class ProjectController extends AbstractController
         $this->projectRepository->update($project);
 
         // Return response format json success
-        return new JsonResponse([
-            'success' => true,
-            'message' => 'You are updated your project with success !'
-        ], 302);
+        return $this->responseJson->message(true, 'You are updated your project with success !');
+    }
+
+    /**
+     * @param string $slug
+     * @return JsonResponse
+     * @throws ORMException
+     * @throws NonUniqueResultException
+     * @throws OptimisticLockException
+     */
+    #[Route('/admin/project/delete/{slug}', name: 'api.project.delete', methods: ["DELETE"])]
+    public function delete(string $slug): JsonResponse
+    {
+        $project = $this->projectRepository->findBySlug($slug);
+        if (!$project) {
+            return $this->responseJson->message(false, 'You try to delete a project who associate a bad slug !');
+        }
+
+        // Delete project current
+        $this->projectRepository->delete(($project));
+        return $this->responseJson->message(true, 'You are deleted your project with success !');
     }
 }

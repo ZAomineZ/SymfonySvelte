@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -26,28 +28,30 @@ class ProjectRepository extends ServiceEntityRepository
 
     /**
      * @param string $title
-     * @return array
+     * @return Project|null
+     * @throws NonUniqueResultException
      */
-    public function findByTitle(string $title): array
+    public function findByTitle(string $title): ?Project
     {
         return $this->createQueryBuilder('p')
             ->where('p.title = :title')
             ->setParameter('title', $title)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
     }
 
     /**
      * @param string $slug
-     * @return array
+     * @return Project|null
+     * @throws NonUniqueResultException
      */
-    public function findBySlug(string $slug): array
+    public function findBySlug(string $slug): ?Project
     {
         return $this->createQueryBuilder('p')
             ->where('p.slug = :slug')
             ->setParameter('slug', $slug)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
     }
 
     /**
@@ -71,6 +75,17 @@ class ProjectRepository extends ServiceEntityRepository
     public function update(Project $project)
     {
         $this->getEntityManager()->persist($project);
+        $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @param Project $project
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function delete(Project $project)
+    {
+        $this->getEntityManager()->remove($project);
         $this->getEntityManager()->flush();
     }
 }
