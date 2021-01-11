@@ -11,6 +11,7 @@
     import ProjectEdit from "./Admin/Page/Project/ProjectEdit.svelte";
 
     import CategoriesAdmin from "./Admin/Page/Category/CategoriesAdmin.svelte"
+    import CategoryCreate from "./Admin/Page/Category/CategoryCreate.svelte"
 </script>
 
 <Router>
@@ -33,5 +34,8 @@
     <!-- CATEGORIES ADMIN ROUTES -->
     <Route path="/admin/categories">
         <CategoriesAdmin/>
+    </Route>
+    <Route path="/admin/category/create">
+        <CategoryCreate />
     </Route>
 </Router>
