@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Cocur\Slugify\Slugify;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -60,9 +61,11 @@ class Category
     private ?DateTimeInterface $updated_at;
 
     /**
+     * @var ArrayCollection|null
+     *
      * @ORM\OneToMany(targetEntity=Project::class, mappedBy="category")
      */
-    private ArrayCollection $projects;
+    private $projects;
 
     /**
      * Category constructor.
@@ -115,7 +118,11 @@ class Category
      */
     public function setSlug(string $slug): self
     {
-        $this->slug = $slug;
+        if (empty($slug)) {
+            $this->slug = (new Slugify())->slugify($this->name);
+        } else {
+            $this->slug = $slug;
+        }
 
         return $this;
     }

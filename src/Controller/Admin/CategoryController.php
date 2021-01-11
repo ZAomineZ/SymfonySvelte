@@ -29,7 +29,7 @@ class CategoryController extends AbstractController
     /**
      * @return Response
      */
-    #[Route("/admin/category/create", methods: ["GET", "HEAD"])]
+    #[Route("/admin/category/edit/{slug}", methods: ["GET", "HEAD"])]
     public function edit(): Response
     {
         return $this->render('page/admin/category/edit.html.twig');

@@ -65,10 +65,10 @@ class CategoryControllerTest extends WebApplicationTestCase
         $category = $this->getLastCategory();
 
         $client = $this->client;
-        $client->request('GET', '/admin/categories/edit/' . $category->getSlug());
+        $client->request('GET', '/admin/category/edit/' . $category->getSlug());
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorTextContains('title', 'Admin Create Category Page');
+        $this->assertSelectorTextContains('title', 'Admin Category Edit Page');
     }
 
     /**

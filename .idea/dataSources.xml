@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="symfony_svelte@localhost" uuid="2dc9c099-6482-4e84-8b3e-3ee79e22d930">
+    <data-source source="LOCAL" name="symfony_svelte@localhost" uuid="a0d2fd54-fb19-428a-930c-a871c77c997c">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
