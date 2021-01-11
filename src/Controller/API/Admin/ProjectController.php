@@ -7,6 +7,7 @@ use App\Helper\ProjectHelper;
 use App\Repository\ProjectRepository;
 use App\Validator\Validator;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -135,8 +136,54 @@ class ProjectController extends AbstractController
         ], 302);
     }
 
-    public function update()
+    /**
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @param string $slug
+     * @return JsonResponse
+     * @throws ORMException
+     */
+    #[Route('/admin/project/update/{slug}', name: 'api.project.update', methods: ["POST"])]
+    public function update(Request $request, ValidatorInterface $validator, string $slug): JsonResponse
     {
+        // Set data json body
+        $body = json_decode($request->request->get('body'));
 
+        // Check if the title already exist
+        /** @var Project $project_exist */
+        $project_exist = $this->projectRepository->findByTitle($body->title) ?
+            $this->projectRepository->findByTitle($body->title)[0] : null;
+        if ($project_exist && $project_exist->getSlug() !== $slug) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'This title is already exist on the project !'
+            ], 302);
+        }
+
+        // Set project entity
+        $project = $this->projectRepository->findBySlug($slug) ?
+            $this->projectRepository->findBySlug($slug)[0] : null;
+        $project->setTitle($body->title)
+            ->setSlug($body->slug)
+            ->setContent($body->content)
+            ->setValidate($body->validate);
+
+        // Validate entity
+        $errors = $validator->validate($project);
+        if ($this->validator->hasError($errors)) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Error validation, check your incorrect fields !',
+                'errors' => $this->validator->getMessage($errors)
+            ], 302);
+        }
+        // if valid data entity
+        $this->projectRepository->update($project);
+
+        // Return response format json success
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'You are updated your project with success !'
+        ], 302);
     }
 }

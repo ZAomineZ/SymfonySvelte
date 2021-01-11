@@ -160,8 +160,6 @@ class ProjectControllerTest extends WebApplicationTestCase
     {
         // LOAD FIXTURE
         $this->loadFixtures([ProjectFixtures::class]);
-        // GET LAST PROJECT
-        $project = $this->getLastProject();
 
         $client = $this->client;
         $client->request('GET', '/api/admin/project/edit/' . 'bad-slug');
@@ -171,6 +169,39 @@ class ProjectControllerTest extends WebApplicationTestCase
         $response = $this->getResponse($client);
         $this->assertEquals(false, $response->success);
         $this->assertEquals("The slug bad-slug project don't exist in our database !", $response->message);
+    }
+
+    public function testActionUpdateSuccess()
+    {
+        // LOAD FIXTURE
+        $this->loadFixtures([ProjectFixtures::class]);
+        // GET LAST PROJECT
+        $project = $this->getLastProject();
+
+        $client = $this->client;
+        $data = [
+            'title' => 'Project SEO test',
+            'slug' => 'project-seo-test',
+            'content' => 'Je vous propose un content sur le seo de mon entreprise "test" !',
+            'validate' => 1
+        ];
+        $client->request('PUT', '/api/admin/project/update/' . $project->getSlug(), [
+            'body' => json_encode($data)
+        ]);
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Request
+        $response = $this->getResponse($client);
+        $this->assertEquals(true, $response->success);
+        $this->assertEquals("You are updated your project with success !", $response->message);
+        // Assertion Project
+        $project_new = $this->getLastProject();
+
+        $this->assertEquals('Project SEO test', $project_new->getTitle());
+        $this->assertEquals('project-seo-test', $project_new->getSlug());
+        $this->assertEquals('Je vous propose un content sur le seo de mon entreprise test !', $project_new->getContent());
+        $this->assertEquals(1, $project_new->getValidate());
+        $this->assertEquals(1, count($this->projectRepository->findAll()));
     }
 
     /**

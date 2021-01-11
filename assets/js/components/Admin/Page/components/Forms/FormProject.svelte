@@ -12,6 +12,7 @@
         handleValidateValue: () => {
         }
     }
+    export let project = null
 </script>
 
 <div id="create-project-form">
@@ -21,18 +22,21 @@
             <form method="post" on:submit|preventDefault>
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input class="form-control" id="title" name="title" on:input={callInput.handleTitleValue} placeholder="Your title..."
-                           type="text">
+                    <input class="form-control" id="title" name="title" on:input={callInput.handleTitleValue}
+                           placeholder="Your title..."
+                           type="text" value={project && project.title}>
                 </div>
                 <div class="form-group">
                     <label for="slug">Slug</label>
-                    <input class="form-control" id="slug" name="slug" on:input={callInput.handleSlugValue} placeholder="Your slug..."
-                           type="text">
+                    <input class="form-control" id="slug" name="slug" on:input={callInput.handleSlugValue}
+                           placeholder="Your slug..."
+                           type="text" value={project && project.slug}>
                 </div>
                 <div class="form-group">
                     <label for="content">Content</label>
-                    <textarea class="form-control" cols="30" id="content" name="content" on:input={callInput.handleContentValue}
-                              placeholder="Your content..." rows="10"></textarea>
+                    <textarea class="form-control" cols="30" id="content" name="content"
+                              on:input={callInput.handleContentValue}
+                              placeholder="Your content..." rows="10">{project && project.content}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="category_id">Category</label>
@@ -46,8 +50,9 @@
                     <div class="col-sm-10">
                         <div class="form-check">
                             <label class="form-check-label" for="validate">
-                                <input class="form-check-input" id="validate" name="validate" on:input={callInput.handleValidateValue}
-                                       type="checkbox">
+                                <input checked={project && project.validate} class="form-check-input" id="validate"
+                                       name="validate"
+                                       on:input={callInput.handleValidateValue} type="checkbox">
                                 Validate
                             </label>
                         </div>

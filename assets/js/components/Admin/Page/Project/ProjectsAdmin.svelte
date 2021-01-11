@@ -4,6 +4,7 @@
     import Navbar from "../../Layout/Navbar.svelte";
     // COMPONENTS SVELTE
     import {onMount} from "svelte";
+    import {Link} from "svelte-routing"
     // LIBS APP
     import {Fetch} from "../../../../utils/ApiFetch";
 
@@ -58,7 +59,9 @@
                                             <td>{project.validate ? 'YES' : 'NO'}</td>
                                             <td>{project.created_at}</td>
                                             <td>
-                                                <a href="/" class="btn btn-sm btn-secondary">Edit</a>
+                                                <Link to={"/admin/project/edit/" + project.slug}
+                                                      class="btn btn-sm btn-secondary">Edit
+                                                </Link>
                                                 <a href="/" class="btn btn-sm btn-danger">Delete</a>
                                             </td>
                                         </tr>

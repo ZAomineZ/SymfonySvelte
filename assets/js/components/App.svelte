@@ -8,6 +8,7 @@
     import AdminPage from "./Admin/Page/AdminPage.svelte";
     import ProjectsAdmin from "./Admin/Page/Project/ProjectsAdmin.svelte";
     import ProjectCreate from "./Admin/Page/Project/ProjectCreate.svelte";
+    import ProjectEdit from "./Admin/Page/Project/ProjectEdit.svelte";
 </script>
 
 <Router>
@@ -22,5 +23,8 @@
     </Route>
     <Route path="/admin/project/create">
         <ProjectCreate />
+    </Route>
+    <Route path="/admin/project/edit/:slug" let:params>
+        <ProjectEdit slug={params.slug}/>
     </Route>
 </Router>

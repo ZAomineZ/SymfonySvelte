@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -59,5 +60,17 @@ class ProjectRepository extends ServiceEntityRepository
             ->setParameter('validate', 1)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Update entity project
+     *
+     * @param Project $project
+     * @throws ORMException
+     */
+    public function update(Project $project)
+    {
+        $this->getEntityManager()->persist($project);
+        $this->getEntityManager()->flush();
     }
 }
