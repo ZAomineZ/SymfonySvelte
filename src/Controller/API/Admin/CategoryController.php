@@ -177,4 +177,22 @@ class CategoryController extends AbstractController
 
         return $this->responseJson->message(true, 'You are updated your category with success !');
     }
+
+    /**
+     * @param string $slug
+     * @return JsonResponse
+     * @throws NonUniqueResultException|ORMException
+     */
+    #[Route("/admin/category/update/{slug}", methods: ["DELETE"])]
+    public function delete(string $slug): JsonResponse
+    {
+        $category = $this->categoryRepository->findBySlug($slug);
+        if (!$category) {
+            return $this->responseJson->message(false, 'You try to delete a category who associate a bad slug !');
+        }
+
+        // Delete category current
+        $this->categoryRepository->delete($category);
+        return $this->responseJson->message(true, 'You are deleted your category with success !');
+    }
 }

@@ -4,8 +4,6 @@ namespace App\Tests\Controller\API;
 
 use App\DataFixtures\Category\CategoriesFixtures;
 use App\DataFixtures\Category\CategoryFixtures;
-use App\DataFixtures\ProjectFixtures;
-use App\DataFixtures\ProjectValidateFixtures;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use App\Tests\WebApplicationTestCase;
@@ -204,7 +202,7 @@ class CategoryControllerTest extends WebApplicationTestCase
         // LOAD FIXTURE
         $this->loadFixtures([CategoryFixtures::class]);
         // GET LAST CATEGORY
-        $project = $this->getLastCategory();
+        $category = $this->getLastCategory();
 
         $client = $this->client;
         $data = [
@@ -212,7 +210,7 @@ class CategoryControllerTest extends WebApplicationTestCase
             'slug' => 'manga',
             'content' => 'Je vous propose un content sur ma catégorie "manga" !'
         ];
-        $client->request('POST', '/api/admin/category/update/' . $project->getSlug(), [
+        $client->request('POST', '/api/admin/category/update/' . $category->getSlug(), [
             'body' => json_encode($data)
         ]);
         $this->assertResponseStatusCodeSame(302);
@@ -228,6 +226,44 @@ class CategoryControllerTest extends WebApplicationTestCase
         $this->assertEquals('manga', $category_new->getSlug());
         $this->assertEquals('Je vous propose un content sur ma catégorie "manga" !', $category_new->getContent());
         $this->assertEquals(1, count($this->categoryRepository->findAll()));
+    }
+
+    public function testDeleteActionWithBadSlug()
+    {
+        // LOAD FIXTURE
+        $this->loadFixtures([CategoryFixtures::class]);
+
+        $client = $this->client;
+        $client->request('DELETE', '/api/admin/category/update/' . 'bad-slug');
+
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Request
+        $response = $this->getResponse($client);
+        $this->assertEquals(false, $response->success);
+        $this->assertEquals("You try to delete a category who associate a bad slug !", $response->message);
+        // Assertion Category
+        $this->assertEquals(1, count($this->categoryRepository->findAll()));
+    }
+
+    public function testDeleteActionSuccess()
+    {
+        // LOAD FIXTURE
+        $this->loadFixtures([CategoryFixtures::class]);
+        // Get last category
+        $category = $this->getLastCategory();
+
+        $client = $this->client;
+        $client->request('DELETE', '/api/admin/category/update/' . $category->getSlug());
+
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Request
+        $response = $this->getResponse($client);
+        $this->assertEquals(true, $response->success);
+        $this->assertEquals("You are deleted your category with success !", $response->message);
+        // Assertion Category
+        $this->assertEquals(0, count($this->categoryRepository->findAll()));
     }
 
     /**

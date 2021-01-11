@@ -64,4 +64,14 @@ class CategoryRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($category);
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * @param Category $category
+     * @throws ORMException
+     */
+    public function delete(Category $category): void
+    {
+        $this->getEntityManager()->remove($category);
+        $this->getEntityManager()->flush();
+    }
 }
