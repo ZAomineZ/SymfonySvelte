@@ -3,9 +3,13 @@
 namespace App\Entity;
 
 use Beelab\TagBundle\Tag\TagInterface;
+use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\Entity(repositoryClass=TagRepository::class)
+ */
 class Tag implements TagInterface
 {
 
@@ -14,7 +18,7 @@ class Tag implements TagInterface
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="auto")
+     * @ORM\GeneratedValue
      */
     protected ?int $id;
 
@@ -100,7 +104,11 @@ class Tag implements TagInterface
      */
     public function setSlug(?string $slug)
     {
-        $this->slug = $slug;
+        if (empty($slug)) {
+            $this->slug = (new Slugify())->slugify($this->name);
+        } else {
+            $this->slug = $slug;
+        }
     }
 
     /**

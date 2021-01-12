@@ -2,9 +2,10 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\ProjectFixtures;
-use App\Entity\Project;
+use App\DataFixtures\Tag\TagFixtures;
+use App\Entity\Tag;
 use App\Repository\ProjectRepository;
+use App\Repository\TagRepository;
 use App\Tests\WebApplicationTestCase;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -59,24 +60,24 @@ class TagControllerTest extends WebApplicationTestCase
 
     public function testEditPageProject()
     {
-        // Project fixture
-        $this->loadFixtures([ProjectFixtures::class]);
-        // Get last project
-        $project = $this->getLastProject();
+        // Tag fixture
+        $this->loadFixtures([TagFixtures::class]);
+        // Get last tag
+        $tag = $this->getLastTag();
 
         $client = $this->client;
-        $client->request('GET', '/admin/project/edit/' . $project->getSlug());
+        $client->request('GET', '/admin/tag/edit/' . $tag->getSlug());
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorTextContains('title', 'Admin Project Edit Page');
+        $this->assertSelectorTextContains('title', 'Admin Tag Edit Page');
     }
 
     /**
-     * @return Project|null
+     * @return Tag|null
      */
-    private function getLastProject(): ?Project
+    private function getLastTag(): ?Tag
     {
         /** @var ProjectRepository $repository */
-        return $this->getLastEntity(ProjectRepository::class);
+        return $this->getLastEntity(TagRepository::class);
     }
 }

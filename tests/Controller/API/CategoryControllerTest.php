@@ -35,7 +35,7 @@ class CategoryControllerTest extends WebApplicationTestCase
         parent::__construct($name, $data, $dataName);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -134,7 +134,7 @@ class CategoryControllerTest extends WebApplicationTestCase
         $this->assertEquals('You are created your category with success !', $response->message);
     }
 
-    public function testActionEditGetProjectEntity()
+    public function testActionEditGetCategoryEntity()
     {
         // LOAD FIXTURE
         $this->loadFixtures([CategoryFixtures::class]);

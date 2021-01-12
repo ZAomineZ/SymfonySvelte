@@ -6,7 +6,7 @@ use App\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class TagFixtures extends Fixture
+class TagsFixtures extends Fixture
 {
 
     /**
@@ -14,11 +14,12 @@ class TagFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        $tag = new Tag();
-        $tag->setName('Manga');
-        $tag->setSlug('manga');
-
-        $manager->persist($tag);
+        for ($i = 0; $i < 3; $i++) {
+            $tag = new Tag();
+            $tag->setName('Tag ' . ($i + 1));
+            $tag->setSlug('tag-' . ($i + 1));
+            $manager->persist($tag);
+        }
         $manager->flush();
     }
 }
