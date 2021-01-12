@@ -4,8 +4,64 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e51255ed562b5f624bee401342bcbc9",
+    "content-hash": "509272ed3d5236f53e88a31b36ef78e0",
     "packages": [
+        {
+            "name": "beelab/tag-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Bee-Lab/BeelabTagBundle.git",
+                "reference": "8b0aefa647210bbdb4bd3fc4fc696036c44026b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Bee-Lab/BeelabTagBundle/zipball/8b0aefa647210bbdb4bd3fc4fc696036c44026b4",
+                "reference": "8b0aefa647210bbdb4bd3fc4fc696036c44026b4",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "^2.7",
+                "php": "^7.3 || ^8.0",
+                "symfony/config": "^4.4 || ^5.0",
+                "symfony/dependency-injection": "^4.4 || ^5.0",
+                "symfony/form": "^4.4 || ^5.0",
+                "symfony/http-kernel": "^4.4 || ^5.0",
+                "symfony/routing": "^4.4 || ^5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Beelab\\TagBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Massimiliano Arione",
+                    "email": "garakkio@gmail.com"
+                }
+            ],
+            "description": "Provide tags for Doctrine entities in Symfony",
+            "homepage": "https://github.com/bee-lab/",
+            "keywords": [
+                "symfony",
+                "tag",
+                "tags"
+            ],
+            "time": "2021-01-09T17:08:31+00:00"
+        },
         {
             "name": "cocur/slugify",
             "version": "v4.0.0",

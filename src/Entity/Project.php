@@ -3,16 +3,20 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use Beelab\TagBundle\Tag\TaggableInterface;
+use Beelab\TagBundle\Tag\TagInterface;
 use Cocur\Slugify\Slugify;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
  */
-class Project
+class Project implements TaggableInterface
 {
     /**
      * @var int|null
@@ -76,12 +80,25 @@ class Project
     private ?Category $category;
 
     /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Tag")
+     */
+    private $tags;
+
+    /**
+     * @var string|null
+     */
+    private ?string $tagsText;
+
+    /**
      * Project constructor.
      */
     public function __construct()
     {
         $this->created_at = new DateTime();
         $this->updated_at = new DateTime();
+        $this->tags = new ArrayCollection();
     }
 
     /**
@@ -227,5 +244,66 @@ class Project
         $this->category = $category;
 
         return $this;
+    }
+
+    /**
+     * @param TagInterface $tag
+     */
+    public function addTag(TagInterface $tag): void
+    {
+        if (!$this->hasTag($tag)) {
+            $this->tags->add($this);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getTagNames(): array
+    {
+        return !empty($this->tagsText) ? array_map('trim', explode(',', $this->tagsText)) : [];
+    }
+
+    /**
+     * @return iterable
+     */
+    public function getTags(): iterable
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param TagInterface $tag
+     * @return bool
+     */
+    public function hasTag(TagInterface $tag): bool
+    {
+        return $this->tags->contains($tag);
+    }
+
+    /**
+     * @param TagInterface $tag
+     */
+    public function removeTag(TagInterface $tag): void
+    {
+        $this->tags->remove($tag);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTagsText(): ?string
+    {
+        $this->tagsText = implode(', ', $this->tags->toArray());
+
+        return $this->tagsText;
+    }
+
+    /**
+     * @param string|null $tagsText
+     */
+    public function setTagsText(?string $tagsText): void
+    {
+        $this->tagsText = $tagsText;
     }
 }
