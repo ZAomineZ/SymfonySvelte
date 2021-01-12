@@ -1,8 +1,34 @@
+<script>
+    // COMPONENT SVELTE
+    import {onMount} from "svelte";
+
+    // STATE
+    let body = null
+    let activeSidebar = true
+
+    onMount(() => {
+        body = document.querySelector('body')
+    })
+
+    /**
+     * Handle event method for hide or show the sidebar to app
+     */
+    function handleToggleSidebarClick() {
+        console.log(body)
+        if (activeSidebar) {
+            body.classList.add('is-collapsed')
+        } else {
+            body.classList.remove('is-collapsed')
+        }
+        activeSidebar = !activeSidebar
+    }
+</script>
+
 <div class="header navbar">
     <div class="header-container">
         <ul class="nav-left">
             <li>
-                <a href="/" id="sidebar-toggle">
+                <a href="#" id="sidebar-toggle" on:click|preventDefault={handleToggleSidebarClick}>
                     <i class="ti-menu"></i>
                 </a>
             </li>

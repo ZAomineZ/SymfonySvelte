@@ -50,6 +50,14 @@
                     <span class="title">Categories</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="sidebar-link" href="/admin/tags">
+                    <span class="icon-holder">
+                        <i class="ti-tag color-purple"></i>
+                    </span>
+                    <span class="title">Tags</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

@@ -6,6 +6,10 @@
   transition: all .2s ease;
 }
 
+.is-collapsed .page-container {
+  padding-left: 70px;
+}
+
 .main-content {
   padding: 85px 20px 20px;
   min-height: calc(100vh - 61px);
@@ -18,5 +22,11 @@
 
   .main-content {
     padding: 85px 5px 5px;
+  }
+}
+
+@media screen and (max-width: 1439px) and (min-width: 992px) {
+  .page-container {
+    padding-left: 70px;
   }
 }
