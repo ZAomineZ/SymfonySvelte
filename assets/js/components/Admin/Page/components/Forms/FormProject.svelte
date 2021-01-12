@@ -7,12 +7,13 @@
         },
         handleContentValue: () => {
         },
-        handleCategoryIDValue: () => {
+        handleCategoryValue: () => {
         },
         handleValidateValue: () => {
         }
     }
     export let project = null
+    export let categories = []
 </script>
 
 <div id="create-project-form">
@@ -41,8 +42,11 @@
                 <div class="form-group">
                     <label for="category_id">Category</label>
                     <select class="form-control" id="category_id" name="category_id"
-                            on:input={callInput.handleCategoryIDValue()}>
+                            on:input={callInput.handleCategoryValue}>
                         <option value="">Choose your category</option>
+                        {#each categories as category}
+                            <option value={category.slug}>{category.name}</option>
+                        {/each}
                     </select>
                 </div>
                 <div class="form-group row">

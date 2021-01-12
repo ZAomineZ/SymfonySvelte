@@ -2,23 +2,28 @@
     // COMPONENTS SVELTE
     import {onMount} from "svelte";
     // LIB APP
-    import {Fetch} from "../../../../utils/ApiFetch";
+    import {Project} from "../../../../Request/Project";
+    import {Category} from "../../../../Request/Category";
     // COMPONENTS HTML
     import Sidebar from "../../Layout/Sidebar.svelte";
     import Navbar from "../../Layout/Navbar.svelte";
     import FormProject from "../components/Forms/FormProject.svelte";
 
+    // STATE
+    let categories = []
+
     // STATE FORM
     let title = null
     let slug = null
     let content = null
-    let category_id = null
+    let category = null
     let validate = null
     // STATE
     let fetch = null
 
-    onMount(() => {
-        fetch = new Fetch()
+    onMount(async () => {
+        const request_categories = await (new Category()).getCategories()
+        categories = request_categories.data.categories
     })
 
     /**
@@ -53,8 +58,8 @@
      *
      * @param {Event} event
      **/
-    function handleCategoryIDValue(event) {
-        category_id = event.target.value
+    function handleCategoryValue(event) {
+        category = event.target.value
     }
 
     /**
@@ -70,12 +75,12 @@
      * @param {Event} event
      */
     async function handleSubmit(event) {
-        const data = {title, slug, content, category_id, validate: validate === 'on'}
+        const data = {title, slug, content, category, validate: validate === 'on'}
 
         let formData = new FormData()
         formData.append('body', JSON.stringify(data))
 
-        const request = await fetch.response('/api/admin/project/create', 'POST', formData)
+        const request = (new Project()).create(formData)
         if (request.success) {
             console.log('Nice !')
         }
@@ -92,8 +97,8 @@
                 <div class="container-fluid">
                     <h4 class="color-grey-bold mt-10 mb-30">Create your project</h4>
                     <FormProject
-                            callInput={{handleTitleValue, handleSlugValue, handleContentValue, handleCategoryIDValue, handleValidateValue}}
-                            on:submit={handleSubmit}/>
+                            callInput={{handleTitleValue, handleSlugValue, handleContentValue, handleCategoryValue, handleValidateValue}}
+                            categories={categories} on:submit={handleSubmit}/>
                 </div>
             </div>
         </main>

@@ -49,4 +49,15 @@ export class Category
         return this.fetch.response('/api/admin/category/update/' + slug, 'POST', formData)
     }
 
+    /**
+     * Return the request API post for update the category current
+     *
+     * @param {string} slug
+     * @returns {Promise<*|null>}
+     */
+    async delete(slug)
+    {
+        return this.fetch.response('/api/admin/category/delete/' + slug, 'DELETE')
+    }
+
 }

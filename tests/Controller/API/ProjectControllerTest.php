@@ -2,9 +2,12 @@
 
 namespace App\Tests\Controller\API;
 
+use App\DataFixtures\Category\CategoryFixtures;
 use App\DataFixtures\ProjectFixtures;
 use App\DataFixtures\ProjectValidateFixtures;
+use App\Entity\Category;
 use App\Entity\Project;
+use App\Repository\CategoryRepository;
 use App\Repository\ProjectRepository;
 use App\Tests\WebApplicationTestCase;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
@@ -65,11 +68,17 @@ class ProjectControllerTest extends WebApplicationTestCase
 
     public function testSuccessPostCreateProjectApi()
     {
+        // Load Fixture Category
+        $this->loadFixtures([CategoryFixtures::class]);
+        // Get last category
+        $category = $this->getLastCategory();
+
         $client = $this->client;
         $data = [
             'title' => 'Project SEO',
             'slug' => 'project-seo',
             'content' => 'Je vous propose un content sur le seo de mon entreprise !',
+            'category' => $category->getSlug(),
             'validate' => 0
         ];
         $client->request('POST', '/api/admin/project/create', [
@@ -113,11 +122,17 @@ class ProjectControllerTest extends WebApplicationTestCase
 
     public function testActionStoreProjectWithSlugEmpty()
     {
+        // Load Fixture Category
+        $this->loadFixtures([CategoryFixtures::class]);
+        // Get last category
+        $category = $this->getLastCategory();
+
         $client = $this->client;
         $data = [
             'title' => 'Project SEO',
             'slug' => '',
             'content' => 'Je vous propose un content sur le seo de mon entreprise !',
+            'category' => $category->getSlug(),
             'validate' => 0
         ];
         $client->request('POST', '/api/admin/project/create', [
@@ -134,6 +149,64 @@ class ProjectControllerTest extends WebApplicationTestCase
         $this->assertEquals(0, $project->getValidate());
         $this->assertEquals(1, count($this->projectRepository->findAll()));
 
+        $response = $this->getResponse($client);
+        $this->assertEquals(true, $response->success);
+        $this->assertEquals('You are created your project with success !', $response->message);
+    }
+
+    public function testActionStoreProjectWithCategoryInvalid()
+    {
+        $client = $this->client;
+        $data = [
+            'title' => 'Project SEO',
+            'slug' => 'project-seo',
+            'content' => 'Je vous propose un content sur le seo de mon entreprise !',
+            'category' => 'bad-slug-category',
+            'validate' => 0
+        ];
+        $client->request('POST', '/api/admin/project/create', [
+            'body' => json_encode($data)
+        ]);
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Project
+        $this->assertEquals(0, count($this->projectRepository->findAll()));
+        // Assertions Response
+        $response = $this->getResponse($client);
+        $this->assertEquals(false, $response->success);
+        $this->assertEquals('You can\'t associate your project to category don\'t exist.', $response->message);
+    }
+
+    public function testActionStoreProjectWithCategoryValid()
+    {
+        // Load Fixture Category
+        $this->loadFixtures([CategoryFixtures::class]);
+        // Get last category
+        $category = $this->getLastCategory();
+
+        $client = $this->client;
+        $data = [
+            'title' => 'Project SEO',
+            'slug' => 'project-seo',
+            'content' => 'Je vous propose un content sur le seo de mon entreprise !',
+            'category' => $category->getSlug(),
+            'validate' => 0
+        ];
+        $client->request('POST', '/api/admin/project/create', [
+            'body' => json_encode($data)
+        ]);
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Project
+        $project = $this->getLastProject();
+
+        $this->assertEquals('Project SEO', $project->getTitle());
+        $this->assertEquals('project-seo', $project->getSlug());
+        $this->assertEquals('Je vous propose un content sur le seo de mon entreprise !', $project->getContent());
+        $this->assertEquals('Anime', $project->getCategory()->getName());
+        $this->assertEquals(0, $project->getValidate());
+        $this->assertEquals(1, count($this->projectRepository->findAll()));
+        // Assertions Response
         $response = $this->getResponse($client);
         $this->assertEquals(true, $response->success);
         $this->assertEquals('You are created your project with success !', $response->message);
@@ -174,15 +247,17 @@ class ProjectControllerTest extends WebApplicationTestCase
     public function testActionUpdateSuccessWithTitleIdentical()
     {
         // LOAD FIXTURE
-        $this->loadFixtures([ProjectFixtures::class]);
-        // GET LAST PROJECT
+        $this->loadFixtures([ProjectFixtures::class, CategoryFixtures::class]);
+        // GET LAST PROJECT AND CATEGORY
         $project = $this->getLastProject();
+        $category = $this->getLastCategory();
 
         $client = $this->client;
         $data = [
             'title' => 'Project SEO',
             'slug' => 'project-seo-test',
             'content' => 'Je vous propose un content sur le seo de mon entreprise "test" !',
+            'category' => $category->getSlug(),
             'validate' => 1
         ];
         $client->request('POST', '/api/admin/project/update/' . $project->getSlug(), [
@@ -207,15 +282,17 @@ class ProjectControllerTest extends WebApplicationTestCase
     public function testActionUpdateSuccess()
     {
         // LOAD FIXTURE
-        $this->loadFixtures([ProjectFixtures::class]);
-        // GET LAST PROJECT
+        $this->loadFixtures([ProjectFixtures::class, CategoryFixtures::class]);
+        // GET LAST PROJECT AND CATEGORY
         $project = $this->getLastProject();
+        $category = $this->getLastCategory();
 
         $client = $this->client;
         $data = [
             'title' => 'Project SEO test',
             'slug' => 'project-seo-test',
             'content' => 'Je vous propose un content sur le seo de mon entreprise "test" !',
+            'category' => $category->getSlug(),
             'validate' => 1
         ];
         $client->request('POST', '/api/admin/project/update/' . $project->getSlug(), [
@@ -233,6 +310,68 @@ class ProjectControllerTest extends WebApplicationTestCase
         $this->assertEquals('Project SEO test', $project_new->getTitle());
         $this->assertEquals('project-seo-test', $project_new->getSlug());
         $this->assertEquals('Je vous propose un content sur le seo de mon entreprise test !', $project_new->getContent());
+        $this->assertEquals(1, $project_new->getValidate());
+        $this->assertEquals(1, count($this->projectRepository->findAll()));
+    }
+
+    public function testActionUpdateWithCategoryInvalid()
+    {
+        // LOAD FIXTURE
+        $this->loadFixtures([ProjectFixtures::class]);
+        // GET LAST PROJECT
+        $project = $this->getLastProject();
+
+        $client = $this->client;
+        $data = [
+            'title' => 'Project SEO test',
+            'slug' => 'project-seo-test',
+            'content' => 'Je vous propose un content sur le seo de mon entreprise "test" !',
+            'category' => 'bad-slug-category',
+            'validate' => 1
+        ];
+        $client->request('POST', '/api/admin/project/update/' . $project->getSlug(), [
+            'body' => json_encode($data)
+        ]);
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Request
+        $response = $this->getResponse($client);
+        $this->assertEquals(false, $response->success);
+        $this->assertEquals("You can\'t associate your project to category don\'t exist.", $response->message);
+    }
+
+    public function testActionUpdateWithCategoryValid()
+    {
+        // LOAD FIXTURE
+        $this->loadFixtures([ProjectFixtures::class, CategoryFixtures::class]);
+        // GET LAST PROJECT AND CATEGORY
+        $project = $this->getLastProject();
+        $category = $this->getLastCategory();
+
+        $client = $this->client;
+        $data = [
+            'title' => 'Project SEO test',
+            'slug' => 'project-seo-test',
+            'content' => 'Je vous propose un content sur le seo de mon entreprise "test" !',
+            'category' => $category->getSlug(),
+            'validate' => 1
+        ];
+        $client->request('POST', '/api/admin/project/update/' . $project->getSlug(), [
+            'body' => json_encode($data)
+        ]);
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        // Assertion Request
+        $response = $this->getResponse($client);
+        $this->assertEquals(true, $response->success);
+        $this->assertEquals("You are updated your project with success !", $response->message);
+        // Assertion Project
+        $project_new = $this->getLastProject();
+
+        $this->assertEquals('Project SEO test', $project_new->getTitle());
+        $this->assertEquals('project-seo-test', $project_new->getSlug());
+        $this->assertEquals('Je vous propose un content sur le seo de mon entreprise test !', $project_new->getContent());
+        $this->assertEquals('Anime', $project_new->getCategory()->getName());
         $this->assertEquals(1, $project_new->getValidate());
         $this->assertEquals(1, count($this->projectRepository->findAll()));
     }
@@ -274,12 +413,26 @@ class ProjectControllerTest extends WebApplicationTestCase
     }
 
     /**
+     * Recuperate last row to project entity
+     *
      * @return Project|null
      */
     private function getLastProject(): ?Project
     {
         /** @var ProjectRepository $repository */
         $repository = self::$container->get(ProjectRepository::class);
+        return $repository->find(1);
+    }
+
+    /**
+     * Recuperate last row to category entity
+     *
+     * @return Category|null
+     */
+    private function getLastCategory(): ?Category
+    {
+        /** @var CategoryRepository $repository */
+        $repository = self::$container->get(CategoryRepository::class);
         return $repository->find(1);
     }
 }

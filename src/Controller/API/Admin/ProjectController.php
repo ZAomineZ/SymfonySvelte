@@ -5,6 +5,7 @@ namespace App\Controller\API\Admin;
 use App\Entity\Project;
 use App\Helper\ProjectHelper;
 use App\Helper\Response\ResponseJson;
+use App\Repository\CategoryRepository;
 use App\Repository\ProjectRepository;
 use App\Validator\Validator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -41,15 +42,25 @@ class ProjectController extends AbstractController
      * @var ResponseJson
      */
     private ResponseJson $responseJson;
+    /**
+     * @var CategoryRepository
+     */
+    private CategoryRepository $categoryRepository;
 
     /**
      * ProjectController constructor.
      * @param ProjectRepository $projectRepository
+     * @param CategoryRepository $categoryRepository
      * @param EntityManagerInterface $entityManager
      */
-    #[Pure] public function __construct(ProjectRepository $projectRepository, EntityManagerInterface $entityManager)
+    #[Pure] public function __construct(
+        ProjectRepository $projectRepository,
+        CategoryRepository $categoryRepository,
+        EntityManagerInterface $entityManager
+    )
     {
         $this->projectRepository = $projectRepository;
+        $this->categoryRepository = $categoryRepository;
         $this->entityManager = $entityManager;
 
         $this->projectHelper = new ProjectHelper();
@@ -91,11 +102,17 @@ class ProjectController extends AbstractController
             return $this->responseJson->message(false, 'This title is already exist on the project !');
         }
 
-        // Set project entity
+        // Check if the category exist
+        $category = $this->categoryRepository->findBySlug($body->category);
+        if (!$category) {
+            return $this->responseJson->message(false, 'You can\'t associate your project to category don\'t exist.');
+        }
+        // Set properties to project entity
         $project = (new Project())
             ->setTitle($body->title)
             ->setSlug($body->slug)
             ->setContent($body->content)
+            ->setCategory($category)
             ->setValidate($body->validate);
 
         // Validate entity
@@ -155,11 +172,17 @@ class ProjectController extends AbstractController
             return $this->responseJson->message(false, 'This title is already exist on the project !');
         }
 
+        // Check if the category exist
+        $category = $this->categoryRepository->findBySlug($body->category);
+        if (!$category) {
+            return $this->responseJson->message(false, 'You can\'t associate your project to category don\'t exist.');
+        }
         // Set project entity
         $project = $this->projectRepository->findBySlug($slug);
         $project->setTitle($body->title)
             ->setSlug($body->slug)
             ->setContent($body->content)
+            ->setCategory($category)
             ->setValidate($body->validate);
 
         // Validate entity

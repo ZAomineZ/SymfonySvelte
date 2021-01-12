@@ -6,18 +6,31 @@
     import {onMount} from "svelte";
     import {Link} from "svelte-routing"
     // LIBS APP
-    import {Fetch} from "../../../../utils/ApiFetch";
+    import {Project} from "../../../../Request/Project.js";
 
     // STATE
     let projects = []
 
     onMount(async () => {
-        const response = await (new Fetch()).response('/api/admin/projects', 'GET')
+        const response = await (new Project()).getProjects()
         if (response.success) {
             projects = response.data.projects
         }
-        console.log(projects)
     })
+
+    /**
+     * Method who init a event for delete to category current
+     *
+     * @param {Event} e
+     */
+    async function handleDelete(e) {
+        const categorySlug = e.target.dataset.slug
+
+        const response = await (new Project()).delete(categorySlug)
+        if (response.success) {
+            console.log('LOL')
+        }
+    }
 </script>
 
 <div>
@@ -62,7 +75,10 @@
                                                 <Link to={"/admin/project/edit/" + project.slug}
                                                       class="btn btn-sm btn-secondary">Edit
                                                 </Link>
-                                                <a href="/" class="btn btn-sm btn-danger">Delete</a>
+                                                <button type="button" class="btn btn-sm btn-danger"
+                                                        data-slug={project.slug} on:click|preventDefault={handleDelete}>
+                                                    Delete
+                                                </button>
                                             </td>
                                         </tr>
                                     {/each}

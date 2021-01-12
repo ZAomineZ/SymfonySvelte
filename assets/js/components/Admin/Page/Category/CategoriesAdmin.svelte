@@ -17,6 +17,21 @@
             categories = response.data.categories
         }
     })
+
+    /**
+     * Method who init a event for delete to category current
+     *
+     * @param {Event} e
+     */
+    async function handleDelete(e) {
+        const categorySlug = e.target.dataset.slug
+
+        const response = await (new Category()).delete(categorySlug)
+        if (response.success) {
+            console.log('LOL')
+        }
+    }
+
 </script>
 
 <div>
@@ -57,7 +72,10 @@
                                                 <Link to={"/admin/category/edit/" + category.slug}
                                                       class="btn btn-sm btn-secondary">Edit
                                                 </Link>
-                                                <a href="/" class="btn btn-sm btn-danger">Delete</a>
+                                                <button type="button" class="btn btn-sm btn-danger"
+                                                        on:click|preventDefault={handleDelete}
+                                                        data-slug={category.slug}>Delete
+                                                </button>
                                             </td>
                                         </tr>
                                     {/each}

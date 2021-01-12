@@ -183,7 +183,7 @@ class CategoryController extends AbstractController
      * @return JsonResponse
      * @throws NonUniqueResultException|ORMException
      */
-    #[Route("/admin/category/update/{slug}", methods: ["DELETE"])]
+    #[Route("/admin/category/delete/{slug}", methods: ["DELETE"])]
     public function delete(string $slug): JsonResponse
     {
         $category = $this->categoryRepository->findBySlug($slug);
