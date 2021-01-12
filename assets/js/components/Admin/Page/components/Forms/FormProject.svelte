@@ -1,4 +1,7 @@
 <script>
+    // COMPONENT SVELTE
+    import Tags from "svelte-tags-input";
+
     // PROPS
     export let callInput = {
         handleTitleValue: () => {
@@ -14,6 +17,7 @@
     }
     export let project = null
     export let categories = []
+    export let tags = []
 </script>
 
 <div id="create-project-form">
@@ -45,9 +49,14 @@
                             on:input={callInput.handleCategoryValue}>
                         <option value="">Choose your category</option>
                         {#each categories as category}
-                            <option value={category.slug} selected={category.slug === project.category}>{category.name}</option>
+                            <option value={category.slug}
+                                    selected={project && category.slug === project.category}>{category.name}</option>
                         {/each}
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="tags">Tags</label>
+                    <Tags name="tags" id="tags" placeholder="Yours tags..." autoComplete={tags}/>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-2">Validate ?</div>

@@ -4,6 +4,7 @@
     // LIB APP
     import {Project} from "../../../../Request/Project";
     import {Category} from "../../../../Request/Category";
+    import {Tag} from "../../../../Request/Tag";
     // COMPONENTS HTML
     import Sidebar from "../../Layout/Sidebar.svelte";
     import Navbar from "../../Layout/Navbar.svelte";
@@ -11,6 +12,7 @@
 
     // STATE
     let categories = []
+    let tags = []
 
     // STATE FORM
     let title = null
@@ -22,8 +24,8 @@
     let fetch = null
 
     onMount(async () => {
-        const request_categories = await (new Category()).getCategories()
-        categories = request_categories.data.categories
+        categories = await (new Category()).getCategories()
+        tags = await (new Tag()).getTags()
     })
 
     /**
@@ -98,7 +100,7 @@
                     <h4 class="color-grey-bold mt-10 mb-30">Create your project</h4>
                     <FormProject
                             callInput={{handleTitleValue, handleSlugValue, handleContentValue, handleCategoryValue, handleValidateValue}}
-                            categories={categories} on:submit={handleSubmit}/>
+                            categories={categories} on:submit={handleSubmit} tags={tags.map(tag => tag.name)}/>
                 </div>
             </div>
         </main>

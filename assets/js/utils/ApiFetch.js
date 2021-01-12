@@ -1,6 +1,6 @@
 // LIB
-import localStorage from 'local-storage-json'
-import Cookies from 'js-cookie'
+/*import localStorage from 'local-storage-json'
+import Cookies from 'js-cookie'*/
 
 export class Fetch {
     /**

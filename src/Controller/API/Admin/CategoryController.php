@@ -3,13 +3,12 @@
 namespace App\Controller\API\Admin;
 
 use App\Entity\Category;
-use App\Helper\CategoryHelper;
+use App\Helper\Entity\CategoryHelper;
 use App\Helper\Response\ResponseJson;
 use App\Repository\CategoryRepository;
 use App\Validator\Validator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\ORMException;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

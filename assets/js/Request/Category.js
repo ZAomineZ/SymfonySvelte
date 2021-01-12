@@ -8,11 +8,15 @@ export class Category
     }
 
     /**
-     * @returns {Promise<*|null>}
+     * @returns {Array}
      */
     async getCategories()
     {
-        return this.fetch.response('/api/admin/categories', 'GET')
+        const response = await this.fetch.response('/api/admin/categories', 'GET')
+        if (response.success) {
+            return response.data.categories
+        }
+        return []
     }
 
     /**
