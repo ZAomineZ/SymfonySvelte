@@ -6,6 +6,7 @@ use Beelab\TagBundle\Tag\TagInterface;
 use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TagRepository::class)
@@ -26,6 +27,8 @@ class Tag implements TagInterface
      * @var string|null
      *
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     * @Assert\Length(min=3, max=60)
      */
     protected ?string $name;
 
