@@ -45,7 +45,7 @@
                             on:input={callInput.handleCategoryValue}>
                         <option value="">Choose your category</option>
                         {#each categories as category}
-                            <option value={category.slug}>{category.name}</option>
+                            <option value={category.slug} selected={category.slug === project.category}>{category.name}</option>
                         {/each}
                     </select>
                 </div>

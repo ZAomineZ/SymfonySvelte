@@ -38,7 +38,7 @@ class ProjectHelper
         $newArray['title'] = $project->getTitle();
         $newArray['slug'] = $project->getSlug();
         $newArray['content'] = $project->getContent();
-        $newArray['category'] = $project->getCategory() ? $project->getCategory()->getName() : null;
+        $newArray['category'] = $project->getCategory() ? $project->getCategory()->getSlug() : null;
         $newArray['validate'] = $project->getValidate();
         $newArray['created_at'] = $project->getCreatedAt()->format('Y-m-d h:i:s');
         // Return array

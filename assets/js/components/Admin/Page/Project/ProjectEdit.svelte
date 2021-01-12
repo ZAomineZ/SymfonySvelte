@@ -2,7 +2,8 @@
     // COMPONENTS SVELTE
     import {onMount} from "svelte";
     // LIB APP
-    import {Fetch} from "../../../../utils/ApiFetch";
+    import {Project} from "../../../../Request/Project";
+    import {Category} from "../../../../Request/Category";
     // COMPONENTS HTML
     import Sidebar from "../../Layout/Sidebar.svelte";
     import Navbar from "../../Layout/Navbar.svelte";
@@ -13,24 +14,24 @@
 
     // STATE
     let project = null
+    let categories = []
 
     // STATE FORM
     let title = null
     let _slug = null
     let content = null
-    let category_id = null
+    let category = null
     let validate = null
-    // STATE
-    let fetch = null
 
     onMount(async () => {
-        fetch = new Fetch()
-
         // Get project current
-        const response = await fetch.response('/api/admin/project/edit/' + slug, 'GET')
+        const response = await (new Project()).edit(slug)
         if (response.success) {
             project = response.data.project
         }
+        // Get all categories
+        const request_categories = await (new Category()).getCategories()
+        categories = request_categories.data.categories
     })
 
     /**
@@ -61,12 +62,12 @@
     }
 
     /**
-     * Change value field category_id
+     * Change value field category
      *
      * @param {Event} event
      **/
-    function handleCategoryIDValue(event) {
-        category_id = event.target.value
+    function handleCategoryValue(event) {
+        category = event.target.value
     }
 
     /**
@@ -86,14 +87,14 @@
             title: title === null ? project.title : title,
             slug: _slug === null ? project.slug : _slug,
             content: content === null ? project.content : content,
-            category_id: category_id === null ? project.category_id : category_id,
+            category: category === null ? project.category : category,
             validate: validate === null ? project.validate : validate === 'on'
         }
 
         let formData = new FormData()
         formData.append('body', JSON.stringify(data))
 
-        const request = await fetch.response('/api/admin/project/update/' + slug, 'POST', formData)
+        const request = await (new Project()).update(slug, formData)
         if (request.success) {
             console.log('Nice !')
         }
@@ -110,8 +111,8 @@
                 <div class="container-fluid">
                     <h4 class="color-grey-bold mt-10 mb-30">Edit your project "{project && project.title}"</h4>
                     <FormProject
-                            callInput={{handleTitleValue, handleSlugValue, handleContentValue, handleCategoryIDValue, handleValidateValue}}
-                            on:submit={handleSubmit} project={project}/>
+                            callInput={{handleTitleValue, handleSlugValue, handleContentValue, handleCategoryValue, handleValidateValue}}
+                            on:submit={handleSubmit} project={project} categories={categories}/>
                 </div>
             </div>
         </main>

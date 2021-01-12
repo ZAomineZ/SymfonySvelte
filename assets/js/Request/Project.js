@@ -1,4 +1,5 @@
 import {Fetch} from "../utils/ApiFetch";
+import {slug} from "../components/Admin/Page/Project/ProjectEdit.svelte";
 
 /**
  * @property {Fetch} fetch
@@ -29,6 +30,30 @@ export class Project
     {
         return this.fetch.response('/api/admin/project/create', 'POST', formData)
     }
+
+    /**
+     * Return the request API GET who recuperate the project current
+     *
+     * @param {string} slug
+     * @returns {Promise<*|null>}
+     */
+    async edit(slug)
+    {
+        return this.fetch.response('/api/admin/project/edit/' + slug, 'GET')
+    }
+
+    /**
+     * Return the request API POST who update the project current
+     *
+     * @param {string} slug
+     * @param {FormData} formData
+     * @returns {Promise<*|null>}
+     */
+    async update(slug, formData)
+    {
+        await this.fetch.response('/api/admin/project/update/' + slug, 'POST', formData)
+    }
+
 
     /**
      * Return the request API post for update the project current
