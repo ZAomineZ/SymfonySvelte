@@ -1,24 +1,27 @@
 <?php
 
-namespace App\DataFixtures;
+
+namespace App\DataFixtures\Project;
+
 
 use App\Entity\Project;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class ProjectValidateFixtures extends Fixture
+class ProjectsFixtures extends Fixture
 {
+
     /**
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $project = (new Project())
-                ->setTitle('Project SEO ' . $i)
-                ->setSlug('project-seo-' . $i)
-                ->setContent('Description project seo ' . $i)
-                ->setValidate($i === 1 ? 0 : 1);
+                ->setTitle('Project ' . ($i + 1))
+                ->setSlug('project-' . ($i + 1))
+                ->setContent('Je suis une description pour le project ' . ($i + 1))
+                ->setValidate(0);
             $manager->persist($project);
         }
         $manager->flush();

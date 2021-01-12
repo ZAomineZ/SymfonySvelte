@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\DataFixtures\Project;
 
 use App\Entity\Project;
 use Doctrine\Bundle\FixturesBundle\Fixture;
