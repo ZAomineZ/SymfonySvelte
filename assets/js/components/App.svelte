@@ -13,6 +13,10 @@
     import CategoriesAdmin from "./Admin/Page/Category/CategoriesAdmin.svelte"
     import CategoryCreate from "./Admin/Page/Category/CategoryCreate.svelte"
     import CategoryEdit from "./Admin/Page/Project/CategoryEdit.svelte";
+
+    import TagsAdmin from "./Admin/Page/Tag/TagsAdmin.svelte"
+    import TagCreate from "./Admin/Page/Tag/TagCreate.svelte"
+    import TagEdit from "./Admin/Page/Tag/TagEdit.svelte"
 </script>
 
 <Router>
@@ -41,5 +45,15 @@
     </Route>
     <Route path="/admin/category/edit/:slug" let:params>
         <CategoryEdit slug={params.slug}/>
+    </Route>
+    <!-- TAGS ADMIN ROUTES -->
+    <Route path="/admin/tags">
+        <TagsAdmin />
+    </Route>
+    <Route path="admin/tag/create">
+        <TagCreate />
+    </Route>
+    <Route path="/admin/tag/edit/:slug" let:params>
+        <TagEdit slug={params.slug}/>
     </Route>
 </Router>
