@@ -7,7 +7,6 @@ use App\DataFixtures\Category\CategoryFixtures;
 use App\Entity\Category;
 use App\Helper\Entity\CategoryHelper;
 use App\Repository\CategoryRepository;
-use App\Repository\ProjectRepository;
 use App\Tests\WebApplicationTestCase;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 
