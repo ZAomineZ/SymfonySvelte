@@ -3,8 +3,8 @@
 namespace App\Tests\Controller\API;
 
 use App\DataFixtures\Category\CategoryFixtures;
-use App\DataFixtures\ProjectFixtures;
-use App\DataFixtures\ProjectValidateFixtures;
+use App\DataFixtures\Project\ProjectFixtures;
+use App\DataFixtures\Project\ProjectValidateFixtures;
 use App\Entity\Category;
 use App\Entity\Project;
 use App\Repository\CategoryRepository;
@@ -38,7 +38,7 @@ class ProjectControllerTest extends WebApplicationTestCase
         parent::__construct($name, $data, $dataName);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
