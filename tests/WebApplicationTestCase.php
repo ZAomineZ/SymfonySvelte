@@ -31,10 +31,31 @@ class WebApplicationTestCase extends WebTestCase
      * @param string $class
      * @return mixed
      */
+    public function getFirstEntity(string $class): mixed
+    {
+        $repository = self::$container->get($class);
+        return $repository->find(1);
+    }
+
+    /**
+     * @param string $class
+     * @return mixed
+     */
     public function getLastEntity(string $class): mixed
     {
         $repository = self::$container->get($class);
         return $repository->find(1);
+    }
+
+    /**
+     * @param string $class
+     * @param int $id
+     * @return mixed
+     */
+    public function getEntityById(string $class, int $id = 1): mixed
+    {
+        $repository = self::$container->get($class);
+        return $repository->find($id);
     }
 
     protected function clearDatabase()

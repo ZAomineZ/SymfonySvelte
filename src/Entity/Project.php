@@ -80,9 +80,9 @@ class Project implements TaggableInterface
     private ?Category $category;
 
     /**
-     * @var Collection
+     * @var Tag|ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Tag")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="projects")
      */
     private $tags;
 
@@ -96,9 +96,9 @@ class Project implements TaggableInterface
      */
     public function __construct()
     {
+        $this->tags = new ArrayCollection();
         $this->created_at = new DateTime();
         $this->updated_at = new DateTime();
-        $this->tags = new ArrayCollection();
     }
 
     /**
@@ -252,7 +252,7 @@ class Project implements TaggableInterface
     public function addTag(TagInterface $tag): void
     {
         if (!$this->hasTag($tag)) {
-            $this->tags->add($this);
+            $this->tags->add($tag);
         }
     }
 
@@ -265,9 +265,9 @@ class Project implements TaggableInterface
     }
 
     /**
-     * @return iterable
+     * @return Collection|Tag[]
      */
-    public function getTags(): iterable
+    public function getTags(): Collection
     {
         return $this->tags;
     }
@@ -286,7 +286,7 @@ class Project implements TaggableInterface
      */
     public function removeTag(TagInterface $tag): void
     {
-        $this->tags->remove($tag);
+        $this->tags->removeElement($tag);
     }
 
     /**
