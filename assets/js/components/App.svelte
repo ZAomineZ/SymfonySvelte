@@ -17,6 +17,8 @@
     import TagsAdmin from "./Admin/Page/Tag/TagsAdmin.svelte"
     import TagCreate from "./Admin/Page/Tag/TagCreate.svelte"
     import TagEdit from "./Admin/Page/Tag/TagEdit.svelte"
+
+    import ImagesAdmin from "./Admin/Page/Image/ImagesAdmin.svelte"
 </script>
 
 <Router>
@@ -55,5 +57,9 @@
     </Route>
     <Route path="/admin/tag/edit/:slug" let:params>
         <TagEdit slug={params.slug}/>
+    </Route>
+    <!-- IMAGES ADMIN ROUTES -->
+    <Route path="/admin/images">
+        <ImagesAdmin />
     </Route>
 </Router>

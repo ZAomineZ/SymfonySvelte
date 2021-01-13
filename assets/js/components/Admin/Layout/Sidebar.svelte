@@ -58,6 +58,14 @@
                     <span class="title">Tags</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="sidebar-link" href="/admin/images">
+                    <span class="icon-holder">
+                        <i class="ti-image color-green"></i>
+                    </span>
+                    <span class="title">Images</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

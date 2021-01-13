@@ -41,7 +41,7 @@ class CategoryHelperTest extends WebApplicationTestCase
         $this->clearDatabase();
     }
 
-    public function testToArrayProjectEntity()
+    public function testToArrayCategoryEntity()
     {
         // Load Fixture
         $this->loadFixtures([CategoriesFixtures::class]);
@@ -58,7 +58,7 @@ class CategoryHelperTest extends WebApplicationTestCase
         $this->assertArrayHasKey('created_at', $new_categories[0]);
     }
 
-    public function testToObjectProjectEntity()
+    public function testToObjectCategoryEntity()
     {
         // Load Fixture
         $this->loadFixtures([CategoryFixtures::class]);
