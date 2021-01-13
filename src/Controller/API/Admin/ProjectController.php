@@ -2,11 +2,13 @@
 
 namespace App\Controller\API\Admin;
 
+use App\Controller\API\Admin\Module\Taggable;
 use App\Entity\Project;
-use App\Helper\ProjectHelper;
+use App\Helper\Entity\ProjectHelper;
 use App\Helper\Response\ResponseJson;
 use App\Repository\CategoryRepository;
 use App\Repository\ProjectRepository;
+use App\Repository\TagRepository;
 use App\Validator\Validator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -22,6 +24,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/api')]
 class ProjectController extends AbstractController
 {
+
+    use Taggable;
+
     /**
      * @var ProjectRepository
      */
@@ -46,21 +51,28 @@ class ProjectController extends AbstractController
      * @var CategoryRepository
      */
     private CategoryRepository $categoryRepository;
+    /**
+     * @var TagRepository
+     */
+    private TagRepository $tagRepository;
 
     /**
      * ProjectController constructor.
      * @param ProjectRepository $projectRepository
      * @param CategoryRepository $categoryRepository
+     * @param TagRepository $tagRepository
      * @param EntityManagerInterface $entityManager
      */
     #[Pure] public function __construct(
         ProjectRepository $projectRepository,
         CategoryRepository $categoryRepository,
+        TagRepository $tagRepository,
         EntityManagerInterface $entityManager
     )
     {
         $this->projectRepository = $projectRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->tagRepository = $tagRepository;
         $this->entityManager = $entityManager;
 
         $this->projectHelper = new ProjectHelper();
@@ -107,6 +119,13 @@ class ProjectController extends AbstractController
         if (!$category) {
             return $this->responseJson->message(false, 'You can\'t associate your project to category don\'t exist.');
         }
+
+        // Check if the fields tags don't empty
+        $tags_field = $body->tags ?: '';
+        if (empty($tags_field)) {
+            return $this->responseJson->message(false, 'Your field tags don\'t must blank !');
+        }
+
         // Set properties to project entity
         $project = (new Project())
             ->setTitle($body->title)
@@ -114,6 +133,8 @@ class ProjectController extends AbstractController
             ->setContent($body->content)
             ->setCategory($category)
             ->setValidate($body->validate);
+        $project->setTagsText($tags_field);
+
 
         // Validate entity
         $errors = $validator->validate($project);
@@ -124,6 +145,16 @@ class ProjectController extends AbstractController
                 'errors' => $this->validator->getMessage($errors)
             ], 302);
         }
+
+        // Check if the tags exist in our database
+        $tags = $project->getTagNames();
+        if (!$this->allTagsExist($tags)) {
+            return $this->responseJson->message(false, 'You can\'t associate your project to tag don\'t exist. !');
+        }
+
+        // Add tag to projects
+        $this->addAllTags($project, $tags);
+
         // if valid data entity
         $this->entityManager->persist($project);
         $this->entityManager->flush();
@@ -177,6 +208,13 @@ class ProjectController extends AbstractController
         if (!$category) {
             return $this->responseJson->message(false, 'You can\'t associate your project to category don\'t exist.');
         }
+
+        // Check if the fields tags don't empty
+        $tags_field = $body->tags ?: '';
+        if (empty($tags_field)) {
+            return $this->responseJson->message(false, 'Your field tags don\'t must blank !');
+        }
+
         // Set project entity
         $project = $this->projectRepository->findBySlug($slug);
         $project->setTitle($body->title)
@@ -184,6 +222,7 @@ class ProjectController extends AbstractController
             ->setContent($body->content)
             ->setCategory($category)
             ->setValidate($body->validate);
+        $project->setTagsText($tags_field);
 
         // Validate entity
         $errors = $validator->validate($project);
@@ -194,6 +233,13 @@ class ProjectController extends AbstractController
                 'errors' => $this->validator->getMessage($errors)
             ], 302);
         }
+
+        // Check if the tags exist in our database
+        $tags = $project->getTagNames();
+        if (!$this->allTagsExist($tags)) {
+            return $this->responseJson->message(false, 'You can\'t associate your project to tag don\'t exist. !');
+        }
+
         // if valid data entity
         $this->projectRepository->update($project);
 
