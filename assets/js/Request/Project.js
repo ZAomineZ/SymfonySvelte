@@ -51,7 +51,7 @@ export class Project
      */
     async update(slug, formData)
     {
-        await this.fetch.response('/api/admin/project/update/' + slug, 'POST', formData)
+        return this.fetch.response('/api/admin/project/update/' + slug, 'POST', formData)
     }
 
 

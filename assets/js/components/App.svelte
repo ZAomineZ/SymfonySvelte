@@ -27,8 +27,8 @@
         <AdminPage/>
     </Route>
     <!-- PROJECTS ADMIN ROUTES -->
-    <Route path="/admin/projects">
-        <ProjectsAdmin/>
+    <Route path="/admin/projects" let:location>
+        <ProjectsAdmin message={location.state && location.state.message ? location.state.message : null} {location}/>
     </Route>
     <Route path="/admin/project/create">
         <ProjectCreate/>
@@ -48,10 +48,10 @@
     </Route>
     <!-- TAGS ADMIN ROUTES -->
     <Route path="/admin/tags">
-        <TagsAdmin />
+        <TagsAdmin/>
     </Route>
     <Route path="admin/tag/create">
-        <TagCreate />
+        <TagCreate/>
     </Route>
     <Route path="/admin/tag/edit/:slug" let:params>
         <TagEdit slug={params.slug}/>

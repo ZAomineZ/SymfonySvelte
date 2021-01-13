@@ -1,6 +1,7 @@
 <script>
     // COMPONENTS SVELTE
     import {onMount} from "svelte";
+    import {navigate} from "svelte-routing";
     // LIB APP
     import {Project} from "../../../../Request/Project";
     import {Category} from "../../../../Request/Category";
@@ -77,7 +78,11 @@
 
         const request = await (new Project()).update(slug, formData)
         if (request.success) {
-            console.log('Nice !')
+            navigate('/admin/projects', {
+                state: {
+                    message: request.message
+                }
+            })
         }
     }
 

@@ -2,11 +2,16 @@
     // COMPONENTS HTML
     import Sidebar from "../../Layout/Sidebar.svelte";
     import Navbar from "../../Layout/Navbar.svelte";
+    import Alert from "../components/Helper/Alert.svelte";
     // COMPONENTS SVELTE
     import {onMount} from "svelte";
     import {Link} from "svelte-routing"
     // LIBS APP
     import {Project} from "../../../../Request/Project.js";
+
+    // PROPS
+    export let message = null
+    export let location
 
     // STATE
     let projects = []
@@ -41,7 +46,11 @@
             <div id="mainContent">
                 <div class="container-fluid">
                     <h4 class="color-grey-bold mt-10 mb-30">Yours projects</h4>
-                    <div class="row">
+                    {#if message}
+                        <Alert message={message}/>
+                    {/if}
+                    <Link to="/admin/project/create" class="btn btn-sm btn-primary">Create project</Link>
+                    <div class="row mt-2">
                         <div class="col-md-12">
                             <div class="background-white bd border-radius-3px p-20 mb-20">
                                 <h4 class="color-grey-bold mb-20">Projects</h4>
@@ -56,6 +65,7 @@
                                         <th scope="col">Slug</th>
                                         <th scope="col">Content</th>
                                         <th scope="col">Category</th>
+                                        <th scope="col">Tags</th>
                                         <th scope="col">Valid ?</th>
                                         <th scope="col">Created</th>
                                         <th scope="col">Actions</th>
@@ -69,6 +79,11 @@
                                             <td>{project.slug}</td>
                                             <td>{project.content}</td>
                                             <td>{project.category}</td>
+                                            <td>
+                                                {#each project.tags as tag}
+                                                    <span class="badge badge-success mr-2">{tag}</span>
+                                                {/each}
+                                            </td>
                                             <td>{project.validate ? 'YES' : 'NO'}</td>
                                             <td>{project.created_at}</td>
                                             <td>
