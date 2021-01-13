@@ -56,6 +56,7 @@ class ProjectHelperTest extends WebApplicationTestCase
         $this->assertArrayHasKey('slug', $new_projects[0]);
         $this->assertArrayHasKey('content', $new_projects[0]);
         $this->assertArrayHasKey('category', $new_projects[0]);
+        $this->assertArrayHasKey('tags', $new_projects[0]);
         $this->assertArrayHasKey('validate', $new_projects[0]);
         $this->assertArrayHasKey('created_at', $new_projects[0]);
     }
@@ -75,6 +76,7 @@ class ProjectHelperTest extends WebApplicationTestCase
         $this->assertArrayHasKey('slug', $new_project[0]);
         $this->assertArrayHasKey('content', $new_project[0]);
         $this->assertArrayHasKey('category', $new_project[0]);
+        $this->assertArrayHasKey('tags', $new_project[0]);
         $this->assertArrayHasKey('validate', $new_project[0]);
         $this->assertArrayHasKey('created_at', $new_project[0]);
     }

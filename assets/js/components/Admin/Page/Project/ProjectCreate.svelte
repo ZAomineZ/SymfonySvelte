@@ -15,11 +15,14 @@
     let tags = []
 
     // STATE FORM
-    let title = null
-    let slug = null
-    let content = null
-    let category = null
-    let validate = null
+    let data = {
+        title: null,
+        slug: null,
+        content: null,
+        category: null,
+        tags: null,
+        validate: null
+    }
     // STATE
     let fetch = null
 
@@ -29,58 +32,38 @@
     })
 
     /**
-     * Change value field title
+     * Handle change value input to form
      *
-     * @param {Event} event
+     * @param {Event} e
      **/
-    function handleTitleValue(event) {
-        title = event.target.value
+    function handleValue(e) {
+        data[e.target.name] = e.target.value
     }
 
     /**
-     * Change value field slug
+     * Handle change value input tags to form
      *
-     * @param {Event} event
+     * @param {Event} e
      **/
-    function handleSlugValue(event) {
-        slug = event.target.value
-    }
-
-    /**
-     * Change value field content
-     *
-     * @param {Event} event
-     **/
-    function handleContentValue(event) {
-        content = event.target.value
-    }
-
-    /**
-     * Change value field category_id
-     *
-     * @param {Event} event
-     **/
-    function handleCategoryValue(event) {
-        category = event.target.value
-    }
-
-    /**
-     * Change value field validate
-     *
-     * @param {Event} event
-     **/
-    function handleValidateValue(event) {
-        validate = event.target.value
+    function handleTagsValue(e) {
+        data['tags'] = e.detail.tags
     }
 
     /**
      * @param {Event} event
      */
     async function handleSubmit(event) {
-        const data = {title, slug, content, category, validate: validate === 'on'}
+        const data_body = {
+            title: data.title,
+            slug: data.slug,
+            content: data.content,
+            category: data.category,
+            tags: data.tags ? data.tags.join(', ') : '',
+            validate: data.validate === 'on'
+        }
 
         let formData = new FormData()
-        formData.append('body', JSON.stringify(data))
+        formData.append('body', JSON.stringify(data_body))
 
         const request = (new Project()).create(formData)
         if (request.success) {
@@ -99,8 +82,8 @@
                 <div class="container-fluid">
                     <h4 class="color-grey-bold mt-10 mb-30">Create your project</h4>
                     <FormProject
-                            callInput={{handleTitleValue, handleSlugValue, handleContentValue, handleCategoryValue, handleValidateValue}}
-                            categories={categories} on:submit={handleSubmit} tags={tags.map(tag => tag.name)}/>
+                            handleInputValue={handleValue} categories={categories} on:submit={handleSubmit}
+                            tags={tags.map(tag => tag.name)} on:tags={handleTagsValue}/>
                 </div>
             </div>
         </main>

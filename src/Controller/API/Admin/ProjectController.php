@@ -240,6 +240,9 @@ class ProjectController extends AbstractController
             return $this->responseJson->message(false, 'You can\'t associate your project to tag don\'t exist. !');
         }
 
+        // Add tag to projects
+        $this->addAllTags($project, $tags);
+
         // if valid data entity
         $this->projectRepository->update($project);
 

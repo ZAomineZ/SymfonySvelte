@@ -8,6 +8,7 @@
     import Sidebar from "../../Layout/Sidebar.svelte";
     import Navbar from "../../Layout/Navbar.svelte";
     import FormProject from "../components/Forms/FormProject.svelte";
+    import {Tag} from "../../../../Request/Tag";
 
     // PROPS
     export let slug;
@@ -15,84 +16,64 @@
     // STATE
     let project = null
     let categories = []
+    let tags = []
+    let tagsProject = []
 
     // STATE FORM
-    let title = null
-    let _slug = null
-    let content = null
-    let category = null
-    let validate = null
+    let data = {
+        title: null,
+        slug: null,
+        content: null,
+        category: null,
+        tags: null,
+        validate: null
+    }
 
     onMount(async () => {
         // Get project current
         const response = await (new Project()).edit(slug)
         if (response.success) {
             project = response.data.project
+            tagsProject = project.tags
         }
-        // Get all categories
-        const request_categories = await (new Category()).getCategories()
-        categories = request_categories.data.categories
+        // Get all categories and tags
+        categories = await (new Category()).getCategories()
+        tags = await (new Tag()).getTags()
     })
 
     /**
-     * Change value field title
+     * Handle change value input to form
      *
-     * @param {Event} event
+     * @param {Event} e
      **/
-    function handleTitleValue(event) {
-        title = event.target.value
+    function handleValue(e) {
+        data[e.target.name] = e.target.value
     }
 
     /**
-     * Change value field slug
+     * Handle change value input tags to form
      *
-     * @param {Event} event
+     * @param {Event} e
      **/
-    function handleSlugValue(event) {
-        _slug = event.target.value
-    }
-
-    /**
-     * Change value field content
-     *
-     * @param {Event} event
-     **/
-    function handleContentValue(event) {
-        content = event.target.value
-    }
-
-    /**
-     * Change value field category
-     *
-     * @param {Event} event
-     **/
-    function handleCategoryValue(event) {
-        category = event.target.value
-    }
-
-    /**
-     * Change value field validate
-     *
-     * @param {Event} event
-     **/
-    function handleValidateValue(event) {
-        validate = event.target.value
+    function handleTagsValue(e) {
+        data['tags'] = e.detail.tags
     }
 
     /**
      * @param {Event} event
      */
     async function handleSubmit(event) {
-        const data = {
-            title: title === null ? project.title : title,
-            slug: _slug === null ? project.slug : _slug,
-            content: content === null ? project.content : content,
-            category: category === null ? project.category : category,
-            validate: validate === null ? project.validate : validate === 'on'
+        const data_body = {
+            title: data.title === null ? project.title : data.title,
+            slug: data.slug === null ? project.slug : data.slug,
+            content: data.content === null ? project.content : data.content,
+            category: data.category === null ? project.category : data.category,
+            tags: data.tags === null ? project.tags.join(', ') : data.tags.join(', '),
+            validate: data.validate === null ? project.validate : data.validate === 'on'
         }
 
         let formData = new FormData()
-        formData.append('body', JSON.stringify(data))
+        formData.append('body', JSON.stringify(data_body))
 
         const request = await (new Project()).update(slug, formData)
         if (request.success) {
@@ -111,8 +92,9 @@
                 <div class="container-fluid">
                     <h4 class="color-grey-bold mt-10 mb-30">Edit your project "{project && project.title}"</h4>
                     <FormProject
-                            callInput={{handleTitleValue, handleSlugValue, handleContentValue, handleCategoryValue, handleValidateValue}}
-                            on:submit={handleSubmit} project={project} categories={categories}/>
+                            handleInputValue={handleValue} project={project} categories={categories}
+                            on:submit={handleSubmit} on:tags={handleTagsValue} tags={tags.map(tag => tag.name)}
+                            tagsProject={tagsProject}/>
                 </div>
             </div>
         </main>

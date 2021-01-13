@@ -3,21 +3,12 @@
     import Tags from "svelte-tags-input";
 
     // PROPS
-    export let callInput = {
-        handleTitleValue: () => {
-        },
-        handleSlugValue: () => {
-        },
-        handleContentValue: () => {
-        },
-        handleCategoryValue: () => {
-        },
-        handleValidateValue: () => {
-        }
+    export let handleInputValue = () => {
     }
     export let project = null
     export let categories = []
     export let tags = []
+    export let tagsProject = []
 </script>
 
 <div id="create-project-form">
@@ -27,26 +18,26 @@
             <form method="post" on:submit|preventDefault>
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input class="form-control" id="title" name="title" on:input={callInput.handleTitleValue}
+                    <input class="form-control" id="title" name="title" on:input={handleInputValue}
                            placeholder="Your title..."
                            type="text" value={project && project.title}>
                 </div>
                 <div class="form-group">
                     <label for="slug">Slug</label>
-                    <input class="form-control" id="slug" name="slug" on:input={callInput.handleSlugValue}
+                    <input class="form-control" id="slug" name="slug" on:input={handleInputValue}
                            placeholder="Your slug..."
                            type="text" value={project && project.slug}>
                 </div>
                 <div class="form-group">
                     <label for="content">Content</label>
                     <textarea class="form-control" cols="30" id="content" name="content"
-                              on:input={callInput.handleContentValue}
+                              on:input={handleInputValue}
                               placeholder="Your content..." rows="10">{project && project.content}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="category_id">Category</label>
                     <select class="form-control" id="category_id" name="category_id"
-                            on:input={callInput.handleCategoryValue}>
+                            on:input={handleInputValue}>
                         <option value="">Choose your category</option>
                         {#each categories as category}
                             <option value={category.slug}
@@ -56,7 +47,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">Tags</label>
-                    <Tags name="tags" id="tags" placeholder="Yours tags..." autoComplete={tags}/>
+                    <Tags name="tags" id="tags" placeholder="Yours tags..." autoComplete={tags} on:tags tags={tagsProject}/>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-2">Validate ?</div>
@@ -65,7 +56,7 @@
                             <label class="form-check-label" for="validate">
                                 <input checked={project && project.validate} class="form-check-input" id="validate"
                                        name="validate"
-                                       on:input={callInput.handleValidateValue} type="checkbox">
+                                       on:input={handleInputValue} type="checkbox">
                                 Validate
                             </label>
                         </div>
