@@ -19,6 +19,7 @@
     import TagEdit from "./Admin/Page/Tag/TagEdit.svelte"
 
     import ImagesAdmin from "./Admin/Page/Image/ImagesAdmin.svelte"
+    import ImageCreate from "./Admin/Page/Image/ImageCreate.svelte"
 </script>
 
 <Router>
@@ -61,5 +62,8 @@
     <!-- IMAGES ADMIN ROUTES -->
     <Route path="/admin/images">
         <ImagesAdmin />
+    </Route>
+    <Route path="/admin/image/create">
+        <ImageCreate />
     </Route>
 </Router>
