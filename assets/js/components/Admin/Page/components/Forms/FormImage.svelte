@@ -2,7 +2,10 @@
     // PROPS
     export let handleValue = () => {
     }
+    export let handleFile = () => {
+    }
     export let image = null
+    export let files
 </script>
 
 <div id="create-project-form">
@@ -24,9 +27,20 @@
                 </div>
                 <div class="form-group">
                     <label for="file">Image</label>
-                    <input class="form-control" id="file" type="file" placeholder="Your image..."
-                           on:input={handleValue}>
+                    <div class="input-group mb-3">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="file" bind:files
+                                   aria-describedby="file">
+                            <label class="custom-file-label" for="file">Choose file</label>
+                        </div>
+                    </div>
                 </div>
+                {#if image}
+                    <div id="image" class="mb-4">
+                        <img src={'/uploads/images/' + image.path} alt="image path to '{image.title}'" width="350"
+                             height="300">
+                    </div>
+                {/if}
                 <button class="btn btn-primary" type="submit">Submit</button>
             </form>
         </div>

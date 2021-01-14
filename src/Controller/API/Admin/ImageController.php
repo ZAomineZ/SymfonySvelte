@@ -189,9 +189,11 @@ class ImageController extends AbstractController
         $path_old_file = $image->getPath();
         $image = $image
             ->setTitle($body->title)
-            ->setSlug($body->slug)
-            ->setFile($file);
-        $this->setFileImageEntity($image, $file);
+            ->setSlug($body->slug);
+        if (!is_null($file)) {
+            $image->setFile($file);
+            $this->setFileImageEntity($image, $file);
+        }
 
         // Validate entity
         $errors = $validator->validate($image);
@@ -204,8 +206,10 @@ class ImageController extends AbstractController
         }
 
         // Treatment upload Image file
-        $this->uploadFile($file);
-        $this->removeFile($path_old_file);
+        if (!is_null($file)) {
+            $this->uploadFile($file);
+            $this->removeFile($path_old_file);
+        }
 
         // Persist entity
         $this->imageRepository->update($image);

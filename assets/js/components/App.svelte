@@ -20,6 +20,7 @@
 
     import ImagesAdmin from "./Admin/Page/Image/ImagesAdmin.svelte"
     import ImageCreate from "./Admin/Page/Image/ImageCreate.svelte"
+    import ImageEdit from "./Admin/Page/Image/ImageEdit.svelte"
 </script>
 
 <Router>
@@ -60,10 +61,13 @@
         <TagEdit slug={params.slug}/>
     </Route>
     <!-- IMAGES ADMIN ROUTES -->
-    <Route path="/admin/images">
-        <ImagesAdmin />
+    <Route path="/admin/images" let:location>
+        <ImagesAdmin message={location.state && location.state.message ? location.state.message : null} />
     </Route>
     <Route path="/admin/image/create">
         <ImageCreate />
+    </Route>
+    <Route path="/admin/image/edit/:slug" let:params>
+        <ImageEdit slug={params.slug}/>
     </Route>
 </Router>

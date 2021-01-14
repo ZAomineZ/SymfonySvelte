@@ -4,9 +4,13 @@
     import Navbar from "../../Layout/Navbar.svelte";
     // COMPONENTS SVELTE
     import {onMount} from "svelte";
-    import {Link} from "svelte-routing"
+    import {Link, navigate} from "svelte-routing"
     // LIBS APP
     import {Image} from "../../../../Request/Image.js";
+    import Alert from "../components/Helper/Alert.svelte";
+
+    // PROPS
+    export let message
 
     // STATE
     let images = []
@@ -25,7 +29,11 @@
 
         const response = await (new Image()).delete(tagSlug)
         if (response.success) {
-            console.log('LOL')
+            navigate('/admin/images', {
+                state: {
+                    message: response.message
+                }
+            })
         }
     }
 
@@ -40,6 +48,9 @@
                 <div class="container-fluid">
                     <h4 class="color-grey-bold mt-10 mb-30">Yours images</h4>
                     <Link to="/admin/image/create" class="btn btn-sm btn-primary">Create image</Link>
+                    {#if message}
+                        <Alert message={message}/>
+                    {/if}
                     <div class="row mt-2">
                         <div class="col-md-12">
                             <div class="background-white bd border-radius-3px p-20 mb-20">
@@ -62,7 +73,7 @@
                                     {#each images as image, i}
                                         <tr>
                                             <td>{i + 1}</td>
-                                            <td>{image.name}</td>
+                                            <td>{image.title}</td>
                                             <td>{image.slug}</td>
                                             <td>{image.path}</td>
                                             <td>{image.created_at}</td>

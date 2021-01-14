@@ -31,7 +31,7 @@ export class Image
      */
     async create(formData)
     {
-        return this.fetch.response('/api/admin/create', 'POST', formData)
+        return this.fetch.response('/api/admin/image/create', 'POST', formData)
     }
 
     /**
@@ -42,7 +42,7 @@ export class Image
      */
     async edit(slug)
     {
-        return this.fetch.response('/api/admin/edit/' + slug, 'GET')
+        return this.fetch.response('/api/admin/image/edit/' + slug, 'GET')
     }
 
     /**
@@ -54,7 +54,7 @@ export class Image
      */
     async update(slug, formData)
     {
-        return this.fetch.response('/api/admin/update/' + slug, 'POST', formData)
+        return this.fetch.response('/api/admin/image/update/' + slug, 'POST', formData)
     }
 
     /**
@@ -65,6 +65,6 @@ export class Image
      */
     async delete(slug)
     {
-        return this.fetch.response('/api/admin/delete/' + slug, 'GET')
+        return this.fetch.response('/api/admin/image/delete/' + slug, 'GET')
     }
 }
