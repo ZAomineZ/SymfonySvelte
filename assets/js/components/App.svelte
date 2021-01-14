@@ -24,12 +24,19 @@
 </script>
 
 <Router>
+    <!-- ROUTES FRONT -->
     <Route path="/">
         <Home/>
     </Route>
+    <Route path="/categories">
+
+    </Route>
+
+    <!-- ROUTES ADMIN -->
     <Route path="/admin">
         <AdminPage/>
     </Route>
+
     <!-- PROJECTS ADMIN ROUTES -->
     <Route path="/admin/projects" let:location>
         <ProjectsAdmin message={location.state && location.state.message ? location.state.message : null} {location}/>

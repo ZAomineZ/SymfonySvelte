@@ -1,5 +1,6 @@
 <script>
     import Header from "../Layout/Header.svelte";
+    import Footer from "../Layout/Footer.svelte";
 </script>
 
 <Header/>
@@ -52,3 +53,31 @@
         </div>
     </div>
 </div>
+<div class="categories-block categories-block-bg">
+    <div class="categories-pattern-1 d-none d-lg-block">
+        <img src="/images/patrn_categories_1.png" alt="pattern categories">
+    </div>
+    <div class="categories-pattern-2 d-none d-lg-block">
+        <img src="/images/patrn_categories.png" alt="pattern categories">
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section-title text-center mb-title-categories">
+                    <h3 class="text-white">Ours categories</h3>
+                    <p class="text-white">
+                        Esteem spirit temper too say adieus who direct esteem. It esteems
+                        <br>
+                        luckily or picture placing drawing.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <!-- CAROUSEL CATEGORIES -->
+            </div>
+        </div>
+    </div>
+</div>
+<Footer/>
