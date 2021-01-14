@@ -146,7 +146,7 @@ class ImageController extends AbstractController
         return new JsonResponse([
             'success' => true,
             'data' => [
-                'image' => $image
+                'image' => $this->imageHelper->toObject($image)
             ]
         ], 302);
     }

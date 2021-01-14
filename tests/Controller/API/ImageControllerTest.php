@@ -89,12 +89,44 @@ class ImageControllerTest extends WebApplicationTestCase
         $this->assertEquals('This title is already associate to the image.', $response->message);
     }
 
-    public function testStoreActionWithSuccess()
+    public function testStoreActionWithSlugEmpty()
     {
         $client = $this->client;
 
         $file = (__DIR__ . '/../../files/images/test.jpg');
         $uploadFile = new UploadedFile($file, 'test.jpg');
+        $data = [
+            'title' => 'Image test',
+            'slug' => ''
+        ];
+        $client->request('POST', '/api/admin/image/create', [
+            'body' => json_encode($data)
+        ], ['file' => $uploadFile]);
+
+        // Assertion request
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        // Assertion response
+        $response = $this->getResponse($client);
+        $this->assertEquals(true, $response->success);
+        $this->assertEquals('You are created your image with success !', $response->message);
+
+        // Assertion Image entity
+        $image = $this->getLastImage();
+        $this->assertEquals('Image test', $image->getTitle());
+        $this->assertEquals('image-test', $image->getSlug());
+        $this->assertContains('test', $image->getPath());
+        // Assertion upload file
+        $this->assertionUploadFile($image);
+    }
+
+    public function testStoreActionWithSuccess()
+    {
+        $client = $this->client;
+
+        $file = (__DIR__ . '/../../files/images/test-2.jpg');
+        $uploadFile = new UploadedFile($file, 'test-2.jpg');
         $data = [
             'title' => 'Image test',
             'slug' => 'image-test'
@@ -107,11 +139,16 @@ class ImageControllerTest extends WebApplicationTestCase
         $this->assertResponseStatusCodeSame(302);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
+        // Assertion response
+        $response = $this->getResponse($client);
+        $this->assertEquals(true, $response->success);
+        $this->assertEquals('You are created your image with success !', $response->message);
+
         // Assertion Image entity
         $image = $this->getLastImage();
         $this->assertEquals('Image test', $image->getTitle());
         $this->assertEquals('image-test', $image->getSlug());
-        $this->assertContains('test', $image->getPath());
+        $this->assertContains('test-2', $image->getPath());
         // Assertion upload file
         $this->assertionUploadFile($image);
     }
@@ -133,18 +170,20 @@ class ImageControllerTest extends WebApplicationTestCase
     public function testEditActionWithSuccess()
     {
         // Load fixture
-        $this->loadFixtures([]);
+        $this->loadFixtures([ImageFixtures::class]);
+        // Get last image entity
+        $image = $this->getLastImage();
 
         $client = $this->client;
-        $client->request('GET', '/api/admin/image/edit/bad-slug');
+        $client->request('GET', '/api/admin/image/edit/' . $image->getSlug());
 
         // Assertion request
         $this->assertResponseStatusCodeSame(302);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         // Assertion response
         $response = $this->getResponse($client);
-        $this->assertEquals(false, $response->success);
-        $this->assertEquals('This slug don\'t associate to image to our database !', $response->message);
+        $this->assertEquals(true, $response->success);
+        $this->assertEquals($image->getSlug(), $response->data->image->slug);
     }
 
     /**
