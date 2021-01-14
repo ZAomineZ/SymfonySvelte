@@ -11,6 +11,8 @@ use App\Repository\ImageRepository;
 use App\Validator\Validator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -154,8 +156,82 @@ class ImageController extends AbstractController
         ], 302);
     }
 
-    public function update()
+    /**
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @param string $slug
+     * @return JsonResponse
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    #[Route("/admin/image/update/{slug}", methods: ["POST"])]
+    public function update(Request $request, ValidatorInterface $validator, string $slug): JsonResponse
     {
+        // Get body and file data to request
+        $body = json_decode($request->request->get('body'));
+        /** @var UploadedFile $file */
+        $file = $request->files->get('file');
 
+        // Check image entity exist
+        $image = $this->imageRepository->findBySlug($slug);
+        if (!$image) {
+            return $this->responseJson->message(false, 'This slug don\'t associate to image to our database !');
+        }
+
+        // Check if title field exist in our database
+        $image_by_title = $this->imageRepository->findByTitle($body->title);
+        if ($image_by_title && $image->getSlug() !== $slug) {
+            return $this->responseJson->message(false, 'This title is already associate to the image.');
+        }
+
+        // Set properties image entity
+        $path_old_file = $image->getPath();
+        $image = $image
+            ->setTitle($body->title)
+            ->setSlug($body->slug)
+            ->setFile($file);
+        $this->setFileImageEntity($image, $file);
+
+        // Validate entity
+        $errors = $validator->validate($image);
+        if ($this->validator->hasError($errors)) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Error validation, check your incorrect fields !',
+                'errors' => $this->validator->getMessage($errors)
+            ], 302);
+        }
+
+        // Treatment upload Image file
+        $this->uploadFile($file);
+        $this->removeFile($path_old_file);
+
+        // Persist entity
+        $this->imageRepository->update($image);
+
+        return $this->responseJson->message(true, 'You are updated your image with success !');
+    }
+
+    /**
+     * @param string $slug
+     * @return JsonResponse
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    #[Route("/admin/image/delete/{slug}", methods: ["GET"])]
+    public function delete(string $slug): JsonResponse
+    {
+        $image = $this->imageRepository->findBySlug($slug);
+        if (!$image) {
+            return $this->responseJson->message(false, 'This slug don\'t associate to image to our database !');
+        }
+
+        // Deleted image path and entity
+        $this->removeFile($image->getPath());
+        $this->imageRepository->delete($image);
+
+        return $this->responseJson->message(true, 'You are deleted your image with success !');
     }
 }

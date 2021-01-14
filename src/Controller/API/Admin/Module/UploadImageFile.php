@@ -29,6 +29,17 @@ trait UploadImageFile
     }
 
     /**
+     * @param string|null $path
+     */
+    public function removeFile(?string $path = null): void
+    {
+        if (!file_exists($path)) {
+            return;
+        }
+        unlink($path);
+    }
+
+    /**
      * @param Image $image
      * @param UploadedFile|null $file
      */
