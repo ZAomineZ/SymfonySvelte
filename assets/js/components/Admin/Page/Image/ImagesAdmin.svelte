@@ -39,11 +39,11 @@
             <div id="mainContent">
                 <div class="container-fluid">
                     <h4 class="color-grey-bold mt-10 mb-30">Yours images</h4>
-                    <div class="row">
+                    <Link to="/admin/image/create" class="btn btn-sm btn-primary">Create image</Link>
+                    <div class="row mt-2">
                         <div class="col-md-12">
                             <div class="background-white bd border-radius-3px p-20 mb-20">
                                 <h4 class="color-grey-bold mb-20">Images</h4>
-                                <Link to="/admin/image/create" class="btn btn-sm btn-primary">Create image</Link>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut cum impedit nesciunt
                                     saepe vel? Consectetur consequuntur, dolore enim ipsam iure, magni natus, non
                                     nostrum praesentium quod ratione temporibus tenetur voluptate?</p>
