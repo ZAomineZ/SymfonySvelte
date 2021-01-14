@@ -106,7 +106,13 @@ class ImageController extends AbstractController
             return $this->responseJson->message(false, 'This title is already associate to the image.');
         }
 
-        $image = new Image();
+        // Set properties image entity
+        $image = (new Image())
+            ->setTitle($body->title)
+            ->setSlug($body->slug)
+            ->setFile($file);
+        $this->setFileImageEntity($image, $file);
+
         // Validate entity
         $errors = $validator->validate($image);
         if ($this->validator->hasError($errors)) {
@@ -118,10 +124,7 @@ class ImageController extends AbstractController
         }
 
         // Treatment upload Image file
-        $this->uploadFile($file, $image);
-        $image
-            ->setTitle($body->title)
-            ->setSlug($body->slug);
+        $this->uploadFile($file);
 
         // Persist entity
         $this->entityManager->persist($image);
@@ -149,5 +152,10 @@ class ImageController extends AbstractController
                 'image' => $this->imageHelper->toObject($image)
             ]
         ], 302);
+    }
+
+    public function update()
+    {
+
     }
 }
