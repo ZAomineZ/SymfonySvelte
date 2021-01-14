@@ -4,6 +4,8 @@
     // COMPONENTS FRONT
     import Home from "./Page/Home.svelte";
 
+    import Categories from "./Page/Category/Index.svelte"
+
     // COMPONENTS ADMIN
     import AdminPage from "./Admin/Page/AdminPage.svelte";
     import ProjectsAdmin from "./Admin/Page/Project/ProjectsAdmin.svelte";
@@ -29,7 +31,7 @@
         <Home/>
     </Route>
     <Route path="/categories">
-
+        <Categories/>
     </Route>
 
     <!-- ROUTES ADMIN -->

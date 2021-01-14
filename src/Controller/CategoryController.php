@@ -11,11 +11,9 @@ class CategoryController extends AbstractController
     /**
      * @return Response
      */
-    #[Route('/category', name: 'category')]
+    #[Route('/categories', name: 'category')]
     public function index(): Response
     {
-        return $this->render('category/index.html.twig', [
-            'controller_name' => 'CategoryController',
-        ]);
+        return $this->render('category/index.html.twig');
     }
 }
