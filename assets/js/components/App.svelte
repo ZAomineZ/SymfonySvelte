@@ -5,6 +5,7 @@
     import Home from "./Page/Home.svelte";
 
     import Categories from "./Page/Category/Index.svelte"
+    import Category from "./Page/Category/Show.svelte"
 
     // COMPONENTS ADMIN
     import AdminPage from "./Admin/Page/AdminPage.svelte";
@@ -32,6 +33,9 @@
     </Route>
     <Route path="/categories">
         <Categories/>
+    </Route>
+    <Route path="/category/:slug" let:params>
+        <Category slug={params.slug}/>
     </Route>
 
     <!-- ROUTES ADMIN -->
