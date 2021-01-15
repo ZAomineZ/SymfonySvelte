@@ -1,6 +1,9 @@
 <script>
     // LIB ROUTES
     import {Route, Router} from "svelte-routing"
+    // COMPONENT AUTH
+    import Signin from "./Page/Auth/Signin.svelte"
+    import Signup from "./Page/Auth/Signup.svelte"
     // COMPONENTS FRONT
     import Home from "./Page/Home.svelte";
 
@@ -36,6 +39,14 @@
     </Route>
     <Route path="/category/:slug" let:params>
         <Category slug={params.slug}/>
+    </Route>
+
+    <!-- ROUTES AUTH -->
+    <Route path="/signin">
+        <Signin/>
+    </Route>
+    <Route path="/signup">
+        <Signup/>
     </Route>
 
     <!-- ROUTES ADMIN -->

@@ -14,12 +14,26 @@
   margin-bottom: 30px !important;
 }
 
+.mb-40 {
+  margin-bottom: 40px !important;
+}
+
 .mb-20 {
   margin-bottom: 20px !important;
 }
 
 .p-20 {
   padding: 20px !important;
+}
+
+.px-40 {
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+}
+
+.py-80 {
+  padding-top: 80px !important;
+  padding-bottom: 80px !important;
 }
 
 .border-radius-50 {
@@ -40,4 +54,20 @@
 
 .bd {
   border: 1px solid rgba(0,0,0,.0625)!important;
+}
+
+.bgc-white, .bgcH-white:hover {
+  background-color: #FFFFFF !important;
+}
+
+.ps {
+  overflow: hidden !important;
+  overflow-anchor: none;
+  -ms-overflow-style: none;
+  touch-action: auto;
+  -ms-touch-action: auto;
+}
+
+.h-100vh {
+  height: 100vh;
 }
