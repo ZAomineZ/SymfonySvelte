@@ -23,6 +23,7 @@
     },
     "dependencies": {
         "@fnando/sparkline": "^0.3.10",
+        "chart.js": "^2.9.4",
         "svelte-routing": "^1.5.0",
         "svelte-tags-input": "^2.6.5"
     }

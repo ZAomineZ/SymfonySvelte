@@ -17,7 +17,7 @@
                             <DashboardDataItems/>
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12" style="position: absolute; left: 0%; top: 124px">
                         <BarData/>
                     </div>
                 </div>
