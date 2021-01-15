@@ -80,11 +80,13 @@ p {
 @import "./admin/layout/navbar.scss";
 // Import elements to admin app
 @import "./admin/element/element-body.scss";
+@import "./admin/element/element-dashboard.scss";
 // Import component to admin app
 @import "./admin/component/element.scss";
 @import "./admin/component/text.scss";
 @import "./admin/component/color.scss";
 @import "./admin/component/table.scss";
+@import "./admin/component/sparkline.scss";
 @import "./admin/component/form.scss";
 @import "./admin/component/form_tags.scss";
 // Import libs

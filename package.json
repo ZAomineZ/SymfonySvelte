@@ -22,6 +22,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@fnando/sparkline": "^0.3.10",
         "svelte-routing": "^1.5.0",
         "svelte-tags-input": "^2.6.5"
     }
