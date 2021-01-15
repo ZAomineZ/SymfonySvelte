@@ -92,6 +92,6 @@
 <div class="bgc-white bd p-20">
     <h6 class="color-grey-bold">Data Dashboard</h6>
     <div class="mt-30">
-        <canvas id="chart-data-bar" width="300" height="200"></canvas>
+        <canvas id="chart-data-bar"></canvas>
     </div>
 </div>

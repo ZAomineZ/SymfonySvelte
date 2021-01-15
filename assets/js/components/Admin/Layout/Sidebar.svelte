@@ -1,9 +1,14 @@
+<script>
+    // COMPONENTS SVELTE
+    import {Link} from 'svelte-routing'
+</script>
+
 <div class="sidebar">
     <div class="sidebar-inner">
         <div class="sidebar-logo">
             <div class="blocks flex-nowrap align-items-center">
                 <div class="block block-greed">
-                    <a class="sidebar-link td-n" href="/">
+                    <Link class="sidebar-link td-n" to="/admin">
                         <div class="blocks flex-nowrap align-items-center">
                             <div class="block">
                                 <div class="logo">
@@ -14,7 +19,7 @@
                                 <h5 class="logo-text mb-0">Adminator</h5>
                             </div>
                         </div>
-                    </a>
+                    </Link>
                 </div>
                 <div class="block">
                     <div class="mobile-toggle" id="sidebar-toggle-action">
