@@ -17,7 +17,7 @@
     {#each categories as category}
         <tr>
             <th scope="row">1</th>
-            <td>Category Title</td>
+            <td>Category Name</td>
             <td>Category Slug</td>
             <td>Category Content...</td>
             <td>Category Created</td>

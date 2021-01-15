@@ -34,10 +34,16 @@
                     <div class="col-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <TableCategories/>
+                                <div class="bgc-white bd border-radius-3px p-20 mb-20">
+                                    <h4 class="color-grey-bold mb-20">Table Categories</h4>
+                                    <TableCategories/>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <TableTags/>
+                                <div class="bgc-white bd border-radius-3px p-20 mb-20">
+                                    <h4 class="color-grey-bold mb-20">Table Tags</h4>
+                                    <TableTags/>
+                                </div>
                             </div>
                         </div>
                     </div>
